@@ -4,15 +4,19 @@
   "version": "2.0.0",
   "description": "",
   "dependencies": {
+    "functional-game-utils": "^2.4.0",
+    "mobx": "^6.6.2",
+    "mobx-react-lite": "^3.4.0",
+    "mobx-state-tree": "^5.1.6",
     "parcel": "^2.0.0",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "styled-components": "^5.3.5"
   },
-  "devDependencies": {},
   "scripts": {
     "start": "parcel src/index.html",
     "build": "parcel build src/index.html"
   },
   "author": "",
-  "license": "ISC"
+  "license": "UNLICENSED"
 }
