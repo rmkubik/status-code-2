@@ -1,5 +1,5 @@
 {
-  "name": "parcel-react-starter",
+  "name": "status-code-2",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "version": "2.0.0",
   "description": "",
@@ -17,6 +17,6 @@
     "start": "parcel src/index.html",
     "build": "parcel build src/index.html"
   },
-  "author": "",
+  "author": "rmkubik",
   "license": "UNLICENSED"
 }

@@ -1,9 +1,31 @@
-import { compareLocations } from "functional-game-utils";
-import { types } from "mobx-state-tree";
+import {
+  compareLocations,
+  getCrossDirections,
+  getNeighbors,
+  isLocationInBounds,
+} from "functional-game-utils";
+import { getParentOfType, types } from "mobx-state-tree";
 
-const Tile = types.model({
-  icon: types.string,
-});
+const Tile = types
+  .model({
+    icon: types.string,
+  })
+  .views((self) => ({
+    getNeighbors() {
+      /**
+       * TODO:
+       *
+       * Interesting! Tile doesn't actually know
+       * where it is located!
+       *
+       * There's no way to pass through this
+       * getNeighbors function back up to the
+       * parent right now!
+       */
+      const grid = getParentOfType(self, Grid);
+      return grid.getNeighbors();
+    },
+  }));
 
 const Location = types.model({
   row: types.number,
@@ -45,6 +67,22 @@ const Grid = types
       }
 
       return selectedUnit;
+    },
+    getNeighbors(location) {
+      const neighbors = getNeighbors(getCrossDirections, self.tiles, location);
+      const validLocations = neighbors.filter((neighborLocation) => {
+        return isLocationInBounds(self.tiles, neighborLocation);
+      });
+
+      return validLocations;
+    },
+    getEmptyNeighbors(location) {
+      const neighborLocations = self.getNeighbors(location);
+      const noUnitLocations = neighborLocations.filter((neighborLocation) => {
+        return !self.getUnitAtLocation(neighborLocation);
+      });
+
+      return noUnitLocations;
     },
   }));
 
