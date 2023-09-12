@@ -11,6 +11,7 @@ const GridContainer = styled.div`
   line-height: ${(props) => `${props.theme.tileSize}px`};
   text-align: center;
   cursor: pointer;
+  user-select: none;
 `;
 
 const Grid = observer(({ renderTile = () => {} }) => {
