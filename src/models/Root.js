@@ -26,6 +26,10 @@ const units = [
     tailIcon: "#",
     parts: [{ row: 3, col: 2 }],
     maxLength: 4,
+    name: "Hack.sh",
+    moves: {
+      max: 2,
+    },
   },
 ];
 

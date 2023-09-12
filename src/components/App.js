@@ -1,15 +1,10 @@
-import {
-  compareLocations,
-  getCrossDirections,
-  getLocation,
-  getNeighbors,
-  isLocationInBounds,
-} from "functional-game-utils";
+import { compareLocations } from "functional-game-utils";
 import React, { useState } from "react";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { RootContextProvider, rootStore, useRootStore } from "../models/Root";
 import Grid from "./Grid";
 import Tile from "./Tile";
+import UnitPanel from "./UnitPanel";
 
 const theme = {
   tileSize: 32,
@@ -25,9 +20,10 @@ const App = () => {
   const [selected, setSelected] = useState();
   const { grid } = useRootStore();
 
+  const selectedUnit = selected && grid.getUnitAtLocation(selected);
+
   return (
     <>
-      <GlobalStyle />
       <Grid
         renderTile={(tile, location) => {
           const isSelected = selected && compareLocations(selected, location);
@@ -52,8 +48,6 @@ const App = () => {
               isMoveTarget={isMoveTarget}
               onClick={() => {
                 if (isMoveTarget) {
-                  const selectedUnit = grid.getUnitAtLocation(selected);
-
                   if (selectedUnit) {
                     selectedUnit.move(location);
                     setSelected(location);
@@ -73,6 +67,7 @@ const App = () => {
           );
         }}
       />
+      <UnitPanel unit={selectedUnit} />
     </>
   );
 };
@@ -82,6 +77,7 @@ const withProviders = (WrappedComponent) => {
     return (
       <RootContextProvider value={rootStore}>
         <ThemeProvider theme={theme}>
+          <GlobalStyle />
           <WrappedComponent />
         </ThemeProvider>
       </RootContextProvider>

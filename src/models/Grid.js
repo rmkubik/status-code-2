@@ -39,6 +39,11 @@ const Unit = types
     location: Location,
     parts: types.array(Location),
     maxLength: types.number,
+    name: types.string,
+    moves: types.model({
+      current: types.optional(types.number, 0),
+      max: types.number,
+    }),
   })
   .actions((self) => ({
     move(location) {
