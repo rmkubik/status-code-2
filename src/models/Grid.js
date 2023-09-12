@@ -5,6 +5,7 @@ import {
   isLocationInBounds,
 } from "functional-game-utils";
 import { getParentOfType, types } from "mobx-state-tree";
+import Unit from "./Unit";
 
 const Tile = types
   .model({
@@ -24,31 +25,6 @@ const Tile = types
        */
       const grid = getParentOfType(self, Grid);
       return grid.getNeighbors();
-    },
-  }));
-
-const Location = types.model({
-  row: types.number,
-  col: types.number,
-});
-
-const Unit = types
-  .model({
-    tailIcon: types.string,
-    headIcon: types.string,
-    location: Location,
-    parts: types.array(Location),
-    maxLength: types.number,
-    name: types.string,
-    moves: types.model({
-      current: types.optional(types.number, 0),
-      max: types.number,
-    }),
-  })
-  .actions((self) => ({
-    move(location) {
-      self.parts.unshift(location);
-      self.parts = self.parts.slice(0, self.maxLength);
     },
   }));
 

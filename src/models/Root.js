@@ -30,6 +30,13 @@ const units = [
     moves: {
       max: 2,
     },
+    actions: [
+      {
+        name: "Slash",
+        range: 1,
+        damage: 2,
+      },
+    ],
   },
 ];
 
