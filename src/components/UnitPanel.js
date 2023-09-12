@@ -5,10 +5,10 @@ const UnitPanel = ({ unit }) => {
     <div>
       <p>{unit?.name ?? "None Selected"}</p>
       <p>
-        Length: {unit?.parts.length ?? "x"}/{unit?.maxLength ?? "x"}
+        Length: {unit?.parts.length ?? "?"}/{unit?.maxLength ?? "?"}
       </p>
       <p>
-        Moves: {unit?.moves.current ?? "x"}/{unit?.moves.max ?? "x"}
+        Moves: {unit?.moves.current ?? "?"}/{unit?.moves.max ?? "?"}
       </p>
       <p>Actions</p>
       <ul>
