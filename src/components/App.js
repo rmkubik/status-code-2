@@ -39,6 +39,7 @@ const App = () => {
 
           const isMoveTarget =
             isUnitSelected &&
+            !selectedUnit.isOutOfMoves &&
             selectedNeighborLocations.some((neighborLocation) =>
               compareLocations(neighborLocation, location)
             );

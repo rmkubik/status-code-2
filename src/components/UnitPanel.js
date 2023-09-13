@@ -8,7 +8,8 @@ const UnitPanel = ({ unit }) => {
         Length: {unit?.parts.length ?? "?"}/{unit?.maxLength ?? "?"}
       </p>
       <p>
-        Moves: {unit?.moves.current ?? "?"}/{unit?.moves.max ?? "?"}
+        Moves: {unit ? unit.moves.max - unit.moves.current : "?"}/
+        {unit?.moves.max ?? "?"}
       </p>
       <p>Actions</p>
       <ul>

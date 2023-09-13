@@ -21,10 +21,20 @@ const Unit = types
       })
     ),
   })
+  .views((self) => ({
+    get isOutOfMoves() {
+      return self.moves.current >= self.moves.max;
+    },
+  }))
   .actions((self) => ({
     move(location) {
+      if (self.isOutOfMoves) {
+        return;
+      }
+
       self.parts.unshift(location);
       self.parts = self.parts.slice(0, self.maxLength);
+      self.moves.current += 1;
     },
   }));
 

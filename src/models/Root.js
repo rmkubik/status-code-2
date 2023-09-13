@@ -2,9 +2,11 @@ import { constructMatrix } from "functional-game-utils";
 import { onSnapshot, types } from "mobx-state-tree";
 import { createContext, useContext } from "react";
 import Grid from "./Grid";
+import Game from "./Game";
 
 const RootModel = types.model({
   grid: Grid,
+  game: Game,
 });
 
 const initialTiles = constructMatrix(
@@ -45,6 +47,7 @@ let initialState = RootModel.create({
     tiles: initialTiles,
     units,
   },
+  game: {},
 });
 
 // if (process.browser) {
