@@ -65,6 +65,11 @@ const Grid = types
 
       return noUnitLocations;
     },
+  }))
+  .actions((self) => ({
+    resetUnitsForNewTurn() {
+      self.units.forEach((unit) => unit.resetForNewTurn());
+    },
   }));
 
 export default Grid;

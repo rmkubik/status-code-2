@@ -4,10 +4,17 @@ import { createContext, useContext } from "react";
 import Grid from "./Grid";
 import Game from "./Game";
 
-const RootModel = types.model({
-  grid: Grid,
-  game: Game,
-});
+const RootModel = types
+  .model({
+    grid: Grid,
+    game: Game,
+  })
+  .actions((self) => ({
+    endTurn() {
+      self.game.advanceTurnCount();
+      self.grid.resetUnitsForNewTurn();
+    },
+  }));
 
 const initialTiles = constructMatrix(
   () => {

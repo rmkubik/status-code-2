@@ -36,6 +36,9 @@ const Unit = types
       self.parts = self.parts.slice(0, self.maxLength);
       self.moves.current += 1;
     },
+    resetForNewTurn() {
+      self.moves.current = 0;
+    },
   }));
 
 export default Unit;

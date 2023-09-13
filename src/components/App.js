@@ -5,6 +5,7 @@ import { RootContextProvider, rootStore, useRootStore } from "../models/Root";
 import Grid from "./Grid";
 import Tile from "./Tile";
 import UnitPanel from "./UnitPanel";
+import { observer } from "mobx-react-lite";
 
 const theme = {
   tileSize: 32,
@@ -20,9 +21,9 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const App = () => {
+const App = observer(() => {
   const [selected, setSelected] = useState();
-  const { grid } = useRootStore();
+  const { grid, game, endTurn } = useRootStore();
 
   const selectedUnit = selected && grid.getUnitAtLocation(selected);
 
@@ -72,10 +73,12 @@ const App = () => {
           );
         }}
       />
+      <p>Turn: {game.currentTurn + 1}</p>
+      <button onClick={endTurn}>End Turn</button>
       <UnitPanel unit={selectedUnit} />
     </>
   );
-};
+});
 
 const withProviders = (WrappedComponent) => {
   return () => {
