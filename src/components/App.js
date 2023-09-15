@@ -41,6 +41,7 @@ const App = observer(() => {
           const isMoveTarget =
             isUnitSelected &&
             !selectedUnit.isOutOfMoves &&
+            selectedUnit.isHeadLocation(selected) &&
             selectedNeighborLocations.some((neighborLocation) =>
               compareLocations(neighborLocation, location)
             );

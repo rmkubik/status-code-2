@@ -1,5 +1,6 @@
 import { types } from "mobx-state-tree";
 import Location from "./Location";
+import { compareLocations } from "functional-game-utils";
 
 const Unit = types
   .model({
@@ -38,6 +39,15 @@ const Unit = types
     },
     resetForNewTurn() {
       self.moves.current = 0;
+    },
+    isHeadLocation(location) {
+      const [headLocation] = self.parts;
+
+      if (!headLocation) {
+        return false;
+      }
+
+      return compareLocations(location, headLocation);
     },
   }));
 
