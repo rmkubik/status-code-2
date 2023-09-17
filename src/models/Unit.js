@@ -1,6 +1,7 @@
-import { types } from "mobx-state-tree";
+import { getSnapshot, types } from "mobx-state-tree";
 import Location from "./Location";
 import { compareLocations } from "functional-game-utils";
+import addLocations from "../utils/addLocations";
 
 const Unit = types
   .model({
@@ -63,6 +64,31 @@ const Unit = types
       return validMoves.some((moveLocation) =>
         compareLocations(moveLocation, location)
       );
+    },
+    isPartAtLocation(location) {
+      return self.parts.some((part) => compareLocations(part, location));
+    },
+    getPartBorders(location) {
+      if (!self.isPartAtLocation(location)) {
+        return {};
+      }
+
+      const up = { row: -1, col: 0 };
+      const down = { row: 1, col: 0 };
+      const left = { row: 0, col: -1 };
+      const right = { row: 0, col: 1 };
+
+      const upLocation = addLocations(location, up);
+      const downLocation = addLocations(location, down);
+      const leftLocation = addLocations(location, left);
+      const rightLocation = addLocations(location, right);
+
+      return {
+        up: self.isPartAtLocation(upLocation),
+        down: self.isPartAtLocation(downLocation),
+        left: self.isPartAtLocation(leftLocation),
+        right: self.isPartAtLocation(rightLocation),
+      };
     },
   }));
 

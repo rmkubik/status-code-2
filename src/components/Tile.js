@@ -4,8 +4,20 @@ import styled from "styled-components";
 import { useRootStore } from "../models/Root";
 
 const TileContainer = styled.div`
-  border: ${(props) =>
-    props.isSelected ? "1px dashed black" : "1px dashed transparent"};
+  border: 1px solid transparent;
+
+  border-top-color: ${(props) => (props.borders.up ? "transparent" : "black")};
+  border-bottom-color: ${(props) =>
+    props.borders.down ? "transparent" : "black"};
+  border-left-color: ${(props) =>
+    props.borders.left ? "transparent" : "black"};
+  border-right-color: ${(props) =>
+    props.borders.right ? "transparent" : "black"};
+
+  border-color: ${(props) => (props.isUnit ? "" : "transparent")};
+
+  border-style: ${(props) => (props.isSelected ? "dashed" : "")};
+  border-color: ${(props) => (props.isSelected ? "black" : "")};
 `;
 
 const Tile = ({ tile, location, isSelected, isMoveTarget, onClick }) => {
@@ -14,6 +26,12 @@ const Tile = ({ tile, location, isSelected, isMoveTarget, onClick }) => {
   const unitOnTile = grid.getUnitAtLocation(location);
   const isHead = unitOnTile && compareLocations(unitOnTile.parts[0], location);
 
+  let borders = {
+    up: false,
+    down: false,
+    left: false,
+    right: false,
+  };
   let tileIcon = tile.icon;
 
   if (unitOnTile) {
@@ -22,6 +40,8 @@ const Tile = ({ tile, location, isSelected, isMoveTarget, onClick }) => {
     } else {
       tileIcon = unitOnTile.tailIcon;
     }
+
+    borders = unitOnTile.getPartBorders(location);
   }
 
   if (isMoveTarget) {
@@ -29,7 +49,12 @@ const Tile = ({ tile, location, isSelected, isMoveTarget, onClick }) => {
   }
 
   return (
-    <TileContainer isSelected={isSelected} onClick={onClick}>
+    <TileContainer
+      isSelected={isSelected}
+      isUnit={Boolean(unitOnTile)}
+      borders={borders}
+      onClick={onClick}
+    >
       {tileIcon}
     </TileContainer>
   );
