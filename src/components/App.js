@@ -92,13 +92,15 @@ const App = observer(() => {
                   if (selectedUnit) {
                     selectedUnit.takeAction(selectedActionIndex, location);
                     game.setSelectedActionIndex(-1);
-                    return;
                   }
+
+                  return;
                 }
 
                 if (isSelected) {
                   setSelected();
                   game.setSelectedActionIndex(-1);
+
                   return;
                 }
 
