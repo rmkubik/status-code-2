@@ -8,11 +8,17 @@ import wait from "../utils/wait";
 
 const RootModel = types
   .model({
+    state: types.optional(
+      types.enumeration(["playerActing", "enemyActing"]),
+      "playerActing"
+    ),
     grid: Grid,
     game: Game,
   })
   .actions((self) => ({
     endTurn: flow(function* endTurn() {
+      self.state = "enemyActing";
+
       const enemyUnits = self.grid
         .getUnitsByOwner(1)
         .filter((unit) => !unit.isDead);
@@ -36,6 +42,7 @@ const RootModel = types
       self.game.advanceTurnCount();
       self.game.setSelectedActionIndex(-1);
       self.grid.resetUnitsForNewTurn();
+      self.state = "playerActing";
     }),
   }));
 

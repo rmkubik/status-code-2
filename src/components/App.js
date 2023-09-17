@@ -48,7 +48,7 @@ const GlobalStyle = createGlobalStyle`
 
 const App = observer(() => {
   const [selected, setSelected] = useState();
-  const { grid, game, endTurn } = useRootStore();
+  const { grid, game, endTurn, state } = useRootStore();
 
   const { selectedActionIndex } = game;
   const selectedUnit = grid.getUnitAtLocation(selected);
@@ -115,7 +115,12 @@ const App = observer(() => {
         style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
       >
         <p style={{ marginRight: "1rem" }}>Turn: {game.currentTurn + 1}</p>
-        <button onClick={endTurn}>End Turn</button>
+        <button
+          className={state === "enemyActing" ? "disabled" : ""}
+          onClick={endTurn}
+        >
+          End Turn
+        </button>
       </div>
       <UnitPanel unit={selectedUnit} />
     </>
