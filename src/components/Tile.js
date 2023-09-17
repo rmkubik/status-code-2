@@ -2,6 +2,7 @@ import { compareLocations } from "functional-game-utils";
 import React from "react";
 import styled from "styled-components";
 import { useRootStore } from "../models/Root";
+import { observer } from "mobx-react-lite";
 
 const getBgColor = (props) => {
   if (!props.isUnit) {
@@ -39,57 +40,53 @@ const TileContainer = styled.div`
   background-color: ${getBgColor};
 `;
 
-const Tile = ({
-  tile,
-  location,
-  isSelected,
-  isMoveTarget,
-  isActionTarget,
-  onClick,
-}) => {
-  const { grid } = useRootStore();
+const Tile = observer(
+  ({ tile, location, isSelected, isMoveTarget, isActionTarget, onClick }) => {
+    const { grid } = useRootStore();
 
-  const unitOnTile = grid.getUnitAtLocation(location);
-  const isHead = unitOnTile && compareLocations(unitOnTile.parts[0], location);
+    const unitOnTile = grid.getUnitAtLocation(location);
+    const isHead =
+      unitOnTile && compareLocations(unitOnTile.parts[0], location);
 
-  let borders = {
-    up: false,
-    down: false,
-    left: false,
-    right: false,
-  };
-  let tileIcon = tile.icon;
+    let borders = {
+      up: false,
+      down: false,
+      left: false,
+      right: false,
+    };
+    let tileIcon = tile.icon;
 
-  if (unitOnTile) {
-    if (isHead) {
-      tileIcon = unitOnTile.headIcon;
-    } else {
-      tileIcon = "";
+    if (unitOnTile) {
+      if (isHead) {
+        tileIcon = unitOnTile.headIcon;
+      } else {
+        tileIcon = "";
+      }
+
+      borders = unitOnTile.getPartBorders(location);
     }
 
-    borders = unitOnTile.getPartBorders(location);
-  }
+    if (isMoveTarget) {
+      tileIcon = "+";
+    }
 
-  if (isMoveTarget) {
-    tileIcon = "+";
-  }
+    if (isActionTarget) {
+      tileIcon = "⚔";
+    }
 
-  if (isActionTarget) {
-    tileIcon = "⚔";
+    return (
+      <TileContainer
+        isSelected={isSelected}
+        isUnit={Boolean(unitOnTile)}
+        borders={borders}
+        owner={unitOnTile?.owner}
+        isActionTarget={isActionTarget}
+        onClick={onClick}
+      >
+        {tileIcon}
+      </TileContainer>
+    );
   }
-
-  return (
-    <TileContainer
-      isSelected={isSelected}
-      isUnit={Boolean(unitOnTile)}
-      borders={borders}
-      owner={unitOnTile?.owner}
-      isActionTarget={isActionTarget}
-      onClick={onClick}
-    >
-      {tileIcon}
-    </TileContainer>
-  );
-};
+);
 
 export default Tile;

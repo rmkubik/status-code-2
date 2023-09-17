@@ -69,6 +69,9 @@ const Grid = types
 
       return noUnitLocations;
     },
+    getUnitsByOwner(owner) {
+      return self.units.filter((unit) => unit.owner === owner);
+    },
   }))
   .actions((self) => ({
     resetUnitsForNewTurn() {

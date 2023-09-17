@@ -1,10 +1,10 @@
-import { getParentOfType, getSnapshot, types } from "mobx-state-tree";
+import { getParentOfType, types } from "mobx-state-tree";
 import Location from "./Location";
 import { compareLocations } from "functional-game-utils";
 import addLocations from "../utils/addLocations";
 import { RootModel } from "./Root";
 import Grid from "./Grid";
-import isTruthy from "../utils/isTruthy";
+import EnemyBrain from "./EnemyBrain";
 
 const Unit = types
   .model({
@@ -30,6 +30,7 @@ const Unit = types
       })
     ),
     owner: types.number,
+    brain: types.maybe(EnemyBrain),
   })
   .views((self) => ({
     get isOutOfMoves() {
