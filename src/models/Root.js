@@ -13,7 +13,10 @@ const RootModel = types
   })
   .actions((self) => ({
     endTurn: flow(function* endTurn() {
-      const enemyUnits = self.grid.getUnitsByOwner(1);
+      const enemyUnits = self.grid
+        .getUnitsByOwner(1)
+        .filter((unit) => !unit.isDead);
+
       for (enemyUnit of enemyUnits) {
         let isUnitMoving = true;
 

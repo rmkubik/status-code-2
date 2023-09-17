@@ -39,6 +39,9 @@ const Unit = types
     get isOutOfActions() {
       return self.actionsTaken.current >= self.actionsTaken.max;
     },
+    get isDead() {
+      return self.parts.length === 0;
+    },
     get head() {
       return self.parts[0];
     },
