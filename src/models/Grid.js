@@ -37,6 +37,10 @@ const Grid = types
   })
   .views((self) => ({
     getUnitAtLocation(location) {
+      if (!location) {
+        return undefined;
+      }
+
       const selectedUnit = self.units.find((unit) => {
         return unit.parts.some((partLocation) =>
           compareLocations(partLocation, location)

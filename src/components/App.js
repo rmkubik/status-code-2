@@ -25,14 +25,14 @@ const App = observer(() => {
   const [selected, setSelected] = useState();
   const { grid, game, endTurn } = useRootStore();
 
-  const selectedUnit = selected && grid.getUnitAtLocation(selected);
+  const selectedUnit = grid.getUnitAtLocation(selected);
 
   return (
     <>
       <Grid
         renderTile={(tile, location) => {
           const isSelected = selected && compareLocations(selected, location);
-          const isUnitSelected = selected && grid.getUnitAtLocation(selected);
+          const isUnitSelected = Boolean(selectedUnit);
 
           const isMoveTarget =
             isUnitSelected &&

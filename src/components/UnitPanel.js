@@ -14,7 +14,7 @@ const UnitPanel = ({ unit }) => {
       <p>Actions</p>
       <ul>
         {unit?.actions.map((action) => (
-          <li>
+          <li key={action.name}>
             {action.name} - {action.damage}
           </li>
         ))}
