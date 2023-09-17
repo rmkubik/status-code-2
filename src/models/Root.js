@@ -3,7 +3,6 @@ import { flow, onSnapshot, types } from "mobx-state-tree";
 import { createContext, useContext } from "react";
 import Grid from "./Grid";
 import Game from "./Game";
-import pickRandomlyFromArray from "../utils/pickRandomlyFromArray";
 import wait from "../utils/wait";
 
 const RootModel = types
@@ -29,11 +28,18 @@ const RootModel = types
         while (isUnitMoving) {
           const moveTarget = enemyUnit.getMoveTarget();
 
-          if (!moveTarget) {
-            break;
-          }
+          if (moveTarget) {
+            enemyUnit.move(moveTarget);
+          } else {
+            const actionIndex = 0;
+            const actionTarget = enemyUnit.getActionTarget(actionIndex);
 
-          enemyUnit.move(moveTarget);
+            if (!actionTarget) {
+              break;
+            }
+
+            enemyUnit.takeAction(actionIndex, actionTarget);
+          }
 
           yield wait(200);
         }

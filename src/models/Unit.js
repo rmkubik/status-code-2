@@ -5,6 +5,7 @@ import addLocations from "../utils/addLocations";
 import { RootModel } from "./Root";
 import Grid from "./Grid";
 import EnemyBrain from "./EnemyBrain";
+import Action from "./Action";
 
 const Unit = types
   .model({
@@ -22,13 +23,7 @@ const Unit = types
       current: types.optional(types.number, 0),
       max: types.optional(types.number, 1),
     }),
-    actions: types.array(
-      types.model({
-        name: types.string,
-        range: types.number,
-        damage: types.number,
-      })
-    ),
+    actions: types.array(Action),
     owner: types.number,
     brain: types.maybe(EnemyBrain),
   })
@@ -89,17 +84,7 @@ const Unit = types
       );
     },
     getValidActionLocations(actionIndex) {
-      const grid = getParentOfType(self, Grid);
-      const action = self.actions[actionIndex];
-
-      // TODO:
-      // Hard code action to just get neighbors
-      // Actually need to support more advanced
-      // targeting shapes in the future!
-
-      const neighbors = grid.getNeighbors(self.head);
-
-      return neighbors;
+      return self.actions[actionIndex].getLocationsInRange();
     },
     canUnitActionAtLocation(location, actionIndex) {
       const validLocations = self.getValidActionLocations(actionIndex);
@@ -173,13 +158,16 @@ const Unit = types
     takeDamage(damage) {
       self.parts = self.parts.slice(0, self.parts.length - damage);
     },
+    getAction(actionIndex) {
+      return self.actions[actionIndex];
+    },
     takeAction(actionIndex, location) {
       if (self.isOutOfActions) {
         return;
       }
 
       const grid = getParentOfType(self, Grid);
-      const action = self.actions[actionIndex];
+      const action = self.getAction(actionIndex);
 
       // TODO:
       // Handle more advanced types of
@@ -196,12 +184,12 @@ const Unit = types
 
       return self.brain.getMoveTarget();
     },
-    getActionTarget() {
+    getActionTarget(actionIndex) {
       if (!self.brain) {
         return undefined;
       }
 
-      return self.brain.getActionTarget();
+      return self.brain.getActionTarget(actionIndex);
     },
   }));
 

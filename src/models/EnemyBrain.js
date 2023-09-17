@@ -4,6 +4,7 @@ import { manhattanDistance } from "functional-game-utils";
 import Unit from "./Unit";
 import pickRandomlyFromArray from "../utils/pickRandomlyFromArray";
 import getLocationsOneStepCloser from "../utils/getLocationsOneStepCloser";
+import isTruthy from "../utils/isTruthy";
 
 // TODO:
 //
@@ -28,7 +29,10 @@ const EnemyBrain = types
       types.enumeration(["random", "towardNearestPlayerUnit"]),
       "random"
     ),
-    actionStrategy: types.optional(types.enumeration(["random"]), "random"),
+    actionStrategy: types.optional(
+      types.enumeration(["randomPlayerUnitInRange"]),
+      "randomPlayerUnitInRange"
+    ),
   })
   .actions((self) => ({
     getMoveTarget() {
@@ -81,7 +85,40 @@ const EnemyBrain = types
 
       return moveTarget;
     },
-    getActionTarget() {},
+    getActionTarget(actionIndex) {
+      const grid = getParentOfType(self, Grid);
+      const unit = getParentOfType(self, Unit);
+
+      const action = unit.getAction(actionIndex);
+      const locationsInRange = action.getLocationsInRange();
+
+      const locationsInRangeWithPlayerUnits = locationsInRange.filter(
+        (location) => {
+          const unitAtLocation = grid.getUnitAtLocation(location);
+
+          if (!unitAtLocation) {
+            return false;
+          }
+
+          return unitAtLocation.owner === 0;
+        }
+      );
+
+      if (unit.isOutOfActions || locationsInRangeWithPlayerUnits.length === 0) {
+        return undefined;
+      }
+
+      let actionTarget;
+
+      switch (self.actionStrategy) {
+        default:
+        case "randomPlayerUnitInRange":
+          actionTarget = pickRandomlyFromArray(locationsInRangeWithPlayerUnits);
+          break;
+      }
+
+      return actionTarget;
+    },
   }));
 
 export default EnemyBrain;
