@@ -39,6 +39,10 @@ const GlobalStyle = createGlobalStyle`
       color: black;
       background-color: white;
     }
+
+    &.disabled {
+      opacity: 0.5;
+    }
   }
 `;
 

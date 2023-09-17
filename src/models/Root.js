@@ -40,6 +40,7 @@ const units = [
     moves: {
       max: 2,
     },
+    actionsTaken: {},
     actions: [
       {
         name: "Slash",
@@ -59,6 +60,7 @@ const units = [
     moves: {
       max: 2,
     },
+    actionsTaken: {},
     actions: [
       {
         name: "Slash",
@@ -82,6 +84,7 @@ const units = [
     moves: {
       max: 2,
     },
+    actionsTaken: {},
     actions: [
       {
         name: "Block",

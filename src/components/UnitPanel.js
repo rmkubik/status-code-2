@@ -1,7 +1,21 @@
 import React from "react";
 import { useRootStore } from "../models/Root";
 
-const UnitPanel = ({ unit, setCurrentActionIndex }) => {
+const getButtonClasses = ({ isSelected, isOutOfActions }) => {
+  let classes = "";
+
+  if (isSelected) {
+    classes += "selected ";
+  }
+
+  if (isOutOfActions) {
+    classes += "disabled ";
+  }
+
+  return classes;
+};
+
+const UnitPanel = ({ unit }) => {
   const { game } = useRootStore();
 
   return (
@@ -14,13 +28,24 @@ const UnitPanel = ({ unit, setCurrentActionIndex }) => {
         Moves: {unit ? unit.moves.max - unit.moves.current : "?"}/
         {unit?.moves.max ?? "?"}
       </p>
-      <p>Actions</p>
+      <p>
+        Actions:{" "}
+        {unit ? unit.actionsTaken.max - unit.actionsTaken.current : "?"}/
+        {unit?.actionsTaken.max ?? "?"}
+      </p>
       <ul>
         {unit?.actions.map((action, index) => (
           <li key={action.name}>
             <button
-              className={game.selectedActionIndex === index ? "selected" : ""}
+              className={getButtonClasses({
+                isSelected: game.selectedActionIndex === index,
+                isOutOfActions: unit?.isOutOfActions,
+              })}
               onClick={() => {
+                if (unit?.isOutOfActions) {
+                  return;
+                }
+
                 if (game.selectedActionIndex === index) {
                   game.setSelectedActionIndex(-1);
                 } else {

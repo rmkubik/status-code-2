@@ -4,6 +4,7 @@ import { compareLocations } from "functional-game-utils";
 import addLocations from "../utils/addLocations";
 import { RootModel } from "./Root";
 import Grid from "./Grid";
+import isTruthy from "../utils/isTruthy";
 
 const Unit = types
   .model({
@@ -17,6 +18,10 @@ const Unit = types
       current: types.optional(types.number, 0),
       max: types.number,
     }),
+    actionsTaken: types.model({
+      current: types.optional(types.number, 0),
+      max: types.optional(types.number, 1),
+    }),
     actions: types.array(
       types.model({
         name: types.string,
@@ -29,6 +34,9 @@ const Unit = types
   .views((self) => ({
     get isOutOfMoves() {
       return self.moves.current >= self.moves.max;
+    },
+    get isOutOfActions() {
+      return self.actionsTaken.current >= self.actionsTaken.max;
     },
     get head() {
       return self.parts[0];
@@ -46,6 +54,7 @@ const Unit = types
     },
     resetForNewTurn() {
       self.moves.current = 0;
+      self.actionsTaken.current = 0;
     },
     isHeadLocation(location) {
       if (!self.head) {
@@ -91,6 +100,38 @@ const Unit = types
     isPartAtLocation(location) {
       return self.parts.some((part) => compareLocations(part, location));
     },
+    getAdjacentParts(location) {
+      // Which index is this location at in the parts array?
+      // Get the 0, 1, or 2 parts adjacent to the location.
+      const targetIndex = self.parts.findIndex((part) =>
+        compareLocations(part, location)
+      );
+
+      // Location is not a part of this unit
+      if (targetIndex === -1) {
+        return [];
+      }
+
+      const parts = [];
+
+      const prevIndex = targetIndex - 1;
+      const nextIndex = targetIndex + 1;
+
+      if (prevIndex >= 0 && prevIndex < self.parts.length) {
+        parts.push(self.parts[prevIndex]);
+      }
+
+      if (nextIndex >= 0 && nextIndex < self.parts.length) {
+        parts.push(self.parts[nextIndex]);
+      }
+
+      return parts;
+    },
+    isAdjacentPartAtLocation(locationA, locationB) {
+      const adjacentParts = self.getAdjacentParts(locationA);
+
+      return adjacentParts.some((part) => compareLocations(part, locationB));
+    },
     getPartBorders(location) {
       if (!self.isPartAtLocation(location)) {
         return {};
@@ -107,10 +148,10 @@ const Unit = types
       const rightLocation = addLocations(location, right);
 
       return {
-        up: self.isPartAtLocation(upLocation),
-        down: self.isPartAtLocation(downLocation),
-        left: self.isPartAtLocation(leftLocation),
-        right: self.isPartAtLocation(rightLocation),
+        up: self.isAdjacentPartAtLocation(location, upLocation),
+        down: self.isAdjacentPartAtLocation(location, downLocation),
+        left: self.isAdjacentPartAtLocation(location, leftLocation),
+        right: self.isAdjacentPartAtLocation(location, rightLocation),
       };
     },
     isPlayerOwned() {
@@ -122,6 +163,10 @@ const Unit = types
       self.parts = self.parts.slice(0, self.parts.length - damage);
     },
     takeAction(actionIndex, location) {
+      if (self.isOutOfActions) {
+        return;
+      }
+
       const grid = getParentOfType(self, Grid);
       const action = self.actions[actionIndex];
 
@@ -131,6 +176,7 @@ const Unit = types
 
       const targetUnit = grid.getUnitAtLocation(location);
       targetUnit.takeDamage(action.damage);
+      self.actionsTaken.current += 1;
     },
   }));
 
