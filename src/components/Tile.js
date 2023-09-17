@@ -35,6 +35,7 @@ const TileContainer = styled.div`
   border-color: ${(props) => (props.isSelected ? "white" : "")};
 
   color: ${(props) => (props.isUnit ? "white" : "")};
+  /* color: ${(props) => (props.isActionTarget ? "red" : "")}; */
   background-color: ${getBgColor};
 `;
 
@@ -83,6 +84,7 @@ const Tile = ({
       isUnit={Boolean(unitOnTile)}
       borders={borders}
       owner={unitOnTile?.owner}
+      isActionTarget={isActionTarget}
       onClick={onClick}
     >
       {tileIcon}

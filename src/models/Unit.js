@@ -118,6 +118,20 @@ const Unit = types
 
       return root.game.isPlayerNumber(self.owner);
     },
+    takeDamage(damage) {
+      self.parts = self.parts.slice(0, self.parts.length - damage);
+    },
+    takeAction(actionIndex, location) {
+      const grid = getParentOfType(self, Grid);
+      const action = self.actions[actionIndex];
+
+      // TODO:
+      // Handle more advanced types of
+      // action targeting and such here.
+
+      const targetUnit = grid.getUnitAtLocation(location);
+      targetUnit.takeDamage(action.damage);
+    },
   }));
 
 export default Unit;

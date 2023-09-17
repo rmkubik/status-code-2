@@ -34,6 +34,11 @@ const GlobalStyle = createGlobalStyle`
       cursor: pointer;
       border-style: dashed;
     }
+
+    &.selected {
+      color: black;
+      background-color: white;
+    }
   }
 `;
 
@@ -77,6 +82,14 @@ const App = observer(() => {
                   }
 
                   return;
+                }
+
+                if (isActionTarget) {
+                  if (selectedUnit) {
+                    selectedUnit.takeAction(selectedActionIndex, location);
+                    game.setSelectedActionIndex(-1);
+                    return;
+                  }
                 }
 
                 if (isSelected) {

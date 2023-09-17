@@ -70,7 +70,7 @@ const units = [
   },
   {
     location: { row: 8, col: 2 },
-    headIcon: "X",
+    headIcon: "█",
     tailIcon: "#",
     parts: [
       { row: 8, col: 2 },

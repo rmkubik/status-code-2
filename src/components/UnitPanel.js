@@ -18,7 +18,16 @@ const UnitPanel = ({ unit, setCurrentActionIndex }) => {
       <ul>
         {unit?.actions.map((action, index) => (
           <li key={action.name}>
-            <button onClick={() => game.setSelectedActionIndex(index)}>
+            <button
+              className={game.selectedActionIndex === index ? "selected" : ""}
+              onClick={() => {
+                if (game.selectedActionIndex === index) {
+                  game.setSelectedActionIndex(-1);
+                } else {
+                  game.setSelectedActionIndex(index);
+                }
+              }}
+            >
               {action.name} - {action.damage}
             </button>
           </li>
