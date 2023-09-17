@@ -26,6 +26,9 @@ const Unit = types
     get isOutOfMoves() {
       return self.moves.current >= self.moves.max;
     },
+    get head() {
+      return self.parts[0];
+    },
   }))
   .actions((self) => ({
     move(location) {
@@ -41,13 +44,25 @@ const Unit = types
       self.moves.current = 0;
     },
     isHeadLocation(location) {
-      const [headLocation] = self.parts;
-
-      if (!headLocation) {
+      if (!self.head) {
         return false;
       }
 
-      return compareLocations(location, headLocation);
+      return compareLocations(location, self.head);
+    },
+    getValidMoveLocations(grid) {
+      if (self.isOutOfMoves) {
+        return [];
+      }
+
+      return grid.getEmptyNeighbors(self.head);
+    },
+    canUnitMoveToLocation(grid, location) {
+      const validMoves = self.getValidMoveLocations(grid);
+
+      return validMoves.some((moveLocation) =>
+        compareLocations(moveLocation, location)
+      );
     },
   }));
 

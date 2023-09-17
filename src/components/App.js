@@ -32,19 +32,12 @@ const App = observer(() => {
       <Grid
         renderTile={(tile, location) => {
           const isSelected = selected && compareLocations(selected, location);
-          const selectedNeighborLocations = selected
-            ? grid.getEmptyNeighbors(selected)
-            : [];
-
           const isUnitSelected = selected && grid.getUnitAtLocation(selected);
 
           const isMoveTarget =
             isUnitSelected &&
-            !selectedUnit.isOutOfMoves &&
             selectedUnit.isHeadLocation(selected) &&
-            selectedNeighborLocations.some((neighborLocation) =>
-              compareLocations(neighborLocation, location)
-            );
+            selectedUnit.canUnitMoveToLocation(grid, location);
 
           return (
             <Tile

@@ -47,6 +47,24 @@ const units = [
       },
     ],
   },
+  {
+    location: { row: 7, col: 5 },
+    headIcon: "@",
+    tailIcon: "#",
+    parts: [{ row: 7, col: 5 }],
+    maxLength: 4,
+    name: "Hack.sh",
+    moves: {
+      max: 2,
+    },
+    actions: [
+      {
+        name: "Slash",
+        range: 1,
+        damage: 2,
+      },
+    ],
+  },
 ];
 
 let initialState = RootModel.create({
