@@ -67,6 +67,29 @@ const units = [
     ],
     owner: 0,
   },
+  {
+    location: { row: 8, col: 2 },
+    headIcon: "X",
+    tailIcon: "#",
+    parts: [
+      { row: 8, col: 2 },
+      { row: 8, col: 3 },
+      { row: 8, col: 4 },
+    ],
+    maxLength: 4,
+    name: "Shield",
+    moves: {
+      max: 2,
+    },
+    actions: [
+      {
+        name: "Block",
+        range: 1,
+        damage: 2,
+      },
+    ],
+    owner: 1,
+  },
 ];
 
 let initialState = RootModel.create({
@@ -113,4 +136,4 @@ function useRootStore() {
   return store;
 }
 
-export { rootStore, RootContextProvider, useRootStore };
+export { rootStore, RootContextProvider, useRootStore, RootModel };

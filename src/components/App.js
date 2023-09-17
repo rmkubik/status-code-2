@@ -38,6 +38,7 @@ const App = observer(() => {
 
           const isMoveTarget =
             isUnitSelected &&
+            selectedUnit.isPlayerOwned() &&
             selectedUnit.isHeadLocation(selected) &&
             selectedUnit.canUnitMoveToLocation(grid, location);
 

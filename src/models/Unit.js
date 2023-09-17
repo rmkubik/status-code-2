@@ -1,7 +1,8 @@
-import { getSnapshot, types } from "mobx-state-tree";
+import { getParentOfType, getSnapshot, types } from "mobx-state-tree";
 import Location from "./Location";
 import { compareLocations } from "functional-game-utils";
 import addLocations from "../utils/addLocations";
+import { RootModel } from "./Root";
 
 const Unit = types
   .model({
@@ -90,6 +91,11 @@ const Unit = types
         left: self.isPartAtLocation(leftLocation),
         right: self.isPartAtLocation(rightLocation),
       };
+    },
+    isPlayerOwned() {
+      const root = getParentOfType(self, RootModel);
+
+      return root.game.isPlayerNumber(self.owner);
     },
   }));
 
