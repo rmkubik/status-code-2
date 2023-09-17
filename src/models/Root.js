@@ -27,13 +27,13 @@ const RootModel = types
         let isUnitMoving = true;
 
         while (isUnitMoving) {
-          const moveOptions = self.grid.getEmptyNeighbors(enemyUnit.head);
-          if (enemyUnit.isOutOfMoves || moveOptions.length === 0) {
+          const moveTarget = enemyUnit.getMoveTarget();
+
+          if (!moveTarget) {
             break;
           }
 
-          const targetLocation = pickRandomlyFromArray(moveOptions);
-          enemyUnit.move(targetLocation);
+          enemyUnit.move(moveTarget);
 
           yield wait(200);
         }
@@ -122,6 +122,9 @@ const units = [
       },
     ],
     owner: 1,
+    brain: {
+      movementStrategy: "towardNearestPlayerUnit",
+    },
   },
   {
     location: { row: 0, col: 8 },
@@ -142,6 +145,7 @@ const units = [
       },
     ],
     owner: 1,
+    brain: { movementStrategy: "towardNearestPlayerUnit" },
   },
 ];
 

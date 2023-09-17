@@ -52,6 +52,13 @@ const Unit = types
         return;
       }
 
+      const grid = getParentOfType(self, Grid);
+
+      if (grid.isUnitAtLocation(location)) {
+        // Do not move on top of another unit
+        return;
+      }
+
       self.parts.unshift(location);
       self.parts = self.parts.slice(0, self.maxLength);
       self.moves.current += 1;
@@ -181,6 +188,20 @@ const Unit = types
       const targetUnit = grid.getUnitAtLocation(location);
       targetUnit.takeDamage(action.damage);
       self.actionsTaken.current += 1;
+    },
+    getMoveTarget() {
+      if (!self.brain) {
+        return undefined;
+      }
+
+      return self.brain.getMoveTarget();
+    },
+    getActionTarget() {
+      if (!self.brain) {
+        return undefined;
+      }
+
+      return self.brain.getActionTarget();
     },
   }));
 

@@ -6,6 +6,7 @@ import {
 } from "functional-game-utils";
 import { getParentOfType, types } from "mobx-state-tree";
 import Unit from "./Unit";
+import isTruthy from "../utils/isTruthy";
 
 const Tile = types
   .model({
@@ -52,6 +53,11 @@ const Grid = types
       }
 
       return selectedUnit;
+    },
+    isUnitAtLocation(location) {
+      const unit = self.getUnitAtLocation(location);
+
+      return isTruthy(unit);
     },
     getNeighbors(location) {
       const neighbors = getNeighbors(getCrossDirections, self.tiles, location);
