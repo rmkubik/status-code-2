@@ -15,7 +15,9 @@ const UnitPanel = ({ unit }) => {
       <ul>
         {unit?.actions.map((action) => (
           <li key={action.name}>
-            {action.name} - {action.damage}
+            <button>
+              {action.name} - {action.damage}
+            </button>
           </li>
         ))}
       </ul>

@@ -21,6 +21,21 @@ const GlobalStyle = createGlobalStyle`
     color: white;
     background-color: black;
   }
+
+  button {
+    color: white;
+    border: 1px solid white;
+    background: none;
+    border-radius: 6px;
+    height: fit-content;
+    padding: 6px 6px;
+    font-size: 1rem;
+
+    &:hover {
+      cursor: pointer;
+      border-style: dashed;
+    }
+  }
 `;
 
 const App = observer(() => {
@@ -70,8 +85,12 @@ const App = observer(() => {
           );
         }}
       />
-      <p>Turn: {game.currentTurn + 1}</p>
-      <button onClick={endTurn}>End Turn</button>
+      <div
+        style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+      >
+        <p style={{ marginRight: "1rem" }}>Turn: {game.currentTurn + 1}</p>
+        <button onClick={endTurn}>End Turn</button>
+      </div>
       <UnitPanel unit={selectedUnit} />
     </>
   );
