@@ -22,6 +22,7 @@ const Unit = types
         damage: types.number,
       })
     ),
+    owner: types.number,
   })
   .views((self) => ({
     get isOutOfMoves() {

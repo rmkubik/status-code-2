@@ -3,6 +3,21 @@ import React from "react";
 import styled from "styled-components";
 import { useRootStore } from "../models/Root";
 
+const getBgColor = (props) => {
+  if (!props.isUnit) {
+    return "";
+  }
+
+  switch (props.owner) {
+    case 0:
+      return "rgb(84, 84, 255)";
+    case 1:
+      return "rgb(255, 84, 84)";
+    default:
+      return "yellow";
+  }
+};
+
 const TileContainer = styled.div`
   border: 1px solid transparent;
 
@@ -17,7 +32,10 @@ const TileContainer = styled.div`
   border-color: ${(props) => (props.isUnit ? "" : "transparent")};
 
   border-style: ${(props) => (props.isSelected ? "dashed" : "")};
-  border-color: ${(props) => (props.isSelected ? "black" : "")};
+  border-color: ${(props) => (props.isSelected ? "white" : "")};
+
+  color: ${(props) => (props.isUnit ? "white" : "")};
+  background-color: ${getBgColor};
 `;
 
 const Tile = ({ tile, location, isSelected, isMoveTarget, onClick }) => {
@@ -38,7 +56,7 @@ const Tile = ({ tile, location, isSelected, isMoveTarget, onClick }) => {
     if (isHead) {
       tileIcon = unitOnTile.headIcon;
     } else {
-      tileIcon = unitOnTile.tailIcon;
+      tileIcon = "";
     }
 
     borders = unitOnTile.getPartBorders(location);
@@ -53,6 +71,7 @@ const Tile = ({ tile, location, isSelected, isMoveTarget, onClick }) => {
       isSelected={isSelected}
       isUnit={Boolean(unitOnTile)}
       borders={borders}
+      owner={unitOnTile?.owner}
       onClick={onClick}
     >
       {tileIcon}

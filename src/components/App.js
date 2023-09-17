@@ -18,6 +18,8 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: Menlo,Courier,monospace;
+    color: white;
+    background-color: black;
   }
 `;
 

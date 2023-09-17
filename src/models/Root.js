@@ -46,6 +46,7 @@ const units = [
         damage: 2,
       },
     ],
+    owner: 0,
   },
   {
     location: { row: 7, col: 5 },
@@ -64,6 +65,7 @@ const units = [
         damage: 2,
       },
     ],
+    owner: 0,
   },
 ];
 
@@ -72,7 +74,9 @@ let initialState = RootModel.create({
     tiles: initialTiles,
     units,
   },
-  game: {},
+  game: {
+    playerNumber: 0,
+  },
 });
 
 // if (process.browser) {
