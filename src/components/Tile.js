@@ -38,7 +38,14 @@ const TileContainer = styled.div`
   background-color: ${getBgColor};
 `;
 
-const Tile = ({ tile, location, isSelected, isMoveTarget, onClick }) => {
+const Tile = ({
+  tile,
+  location,
+  isSelected,
+  isMoveTarget,
+  isActionTarget,
+  onClick,
+}) => {
   const { grid } = useRootStore();
 
   const unitOnTile = grid.getUnitAtLocation(location);
@@ -64,6 +71,10 @@ const Tile = ({ tile, location, isSelected, isMoveTarget, onClick }) => {
 
   if (isMoveTarget) {
     tileIcon = "+";
+  }
+
+  if (isActionTarget) {
+    tileIcon = "⚔";
   }
 
   return (

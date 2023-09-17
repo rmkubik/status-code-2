@@ -12,6 +12,7 @@ const RootModel = types
   .actions((self) => ({
     endTurn() {
       self.game.advanceTurnCount();
+      self.game.setSelectedActionIndex(-1);
       self.grid.resetUnitsForNewTurn();
     },
   }));

@@ -26,7 +26,6 @@ const GlobalStyle = createGlobalStyle`
     color: white;
     border: 1px solid white;
     background: none;
-    border-radius: 6px;
     height: fit-content;
     padding: 6px 6px;
     font-size: 1rem;
@@ -42,6 +41,7 @@ const App = observer(() => {
   const [selected, setSelected] = useState();
   const { grid, game, endTurn } = useRootStore();
 
+  const { selectedActionIndex } = game;
   const selectedUnit = grid.getUnitAtLocation(selected);
 
   return (
@@ -57,12 +57,17 @@ const App = observer(() => {
             selectedUnit.isHeadLocation(selected) &&
             selectedUnit.canUnitMoveToLocation(grid, location);
 
+          const isActionTarget =
+            selectedActionIndex !== -1 &&
+            selectedUnit.canUnitActionAtLocation(location, selectedActionIndex);
+
           return (
             <Tile
               key={`${location.row}.${location.col}`}
               tile={tile}
               location={location}
               isSelected={isSelected}
+              isActionTarget={isActionTarget}
               isMoveTarget={isMoveTarget}
               onClick={() => {
                 if (isMoveTarget) {
@@ -76,9 +81,11 @@ const App = observer(() => {
 
                 if (isSelected) {
                   setSelected();
+                  game.setSelectedActionIndex(-1);
                   return;
                 }
 
+                game.setSelectedActionIndex(-1);
                 setSelected(location);
               }}
             />

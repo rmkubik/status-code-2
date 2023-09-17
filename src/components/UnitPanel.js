@@ -1,6 +1,9 @@
 import React from "react";
+import { useRootStore } from "../models/Root";
 
-const UnitPanel = ({ unit }) => {
+const UnitPanel = ({ unit, setCurrentActionIndex }) => {
+  const { game } = useRootStore();
+
   return (
     <div>
       <p>{unit?.name ?? "None Selected"}</p>
@@ -13,9 +16,9 @@ const UnitPanel = ({ unit }) => {
       </p>
       <p>Actions</p>
       <ul>
-        {unit?.actions.map((action) => (
+        {unit?.actions.map((action, index) => (
           <li key={action.name}>
-            <button>
+            <button onClick={() => game.setSelectedActionIndex(index)}>
               {action.name} - {action.damage}
             </button>
           </li>

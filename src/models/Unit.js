@@ -3,6 +3,7 @@ import Location from "./Location";
 import { compareLocations } from "functional-game-utils";
 import addLocations from "../utils/addLocations";
 import { RootModel } from "./Root";
+import Grid from "./Grid";
 
 const Unit = types
   .model({
@@ -65,6 +66,26 @@ const Unit = types
 
       return validMoves.some((moveLocation) =>
         compareLocations(moveLocation, location)
+      );
+    },
+    getValidActionLocations(actionIndex) {
+      const grid = getParentOfType(self, Grid);
+      const action = self.actions[actionIndex];
+
+      // TODO:
+      // Hard code action to just get neighbors
+      // Actually need to support more advanced
+      // targeting shapes in the future!
+
+      const neighbors = grid.getNeighbors(self.head);
+
+      return neighbors;
+    },
+    canUnitActionAtLocation(location, actionIndex) {
+      const validLocations = self.getValidActionLocations(actionIndex);
+
+      return validLocations.some((validLocation) =>
+        compareLocations(validLocation, location)
       );
     },
     isPartAtLocation(location) {
