@@ -7,6 +7,7 @@ import {
 import { getParentOfType, types } from "mobx-state-tree";
 import Unit from "./Unit";
 import isTruthy from "../utils/isTruthy";
+import { RootModel } from "./Root";
 
 const Tile = types
   .model({
@@ -82,6 +83,12 @@ const Grid = types
   .actions((self) => ({
     resetUnitsForNewTurn() {
       self.units.forEach((unit) => unit.resetForNewTurn());
+    },
+    createUnit({ location, owner, type, otherParts }) {
+      const { unitFactory } = getParentOfType(self, RootModel);
+      const newUnit = unitFactory.create({ location, owner, type, otherParts });
+
+      self.units.push(newUnit);
     },
   }));
 

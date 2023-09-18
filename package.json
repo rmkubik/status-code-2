@@ -18,5 +18,8 @@
     "build": "parcel build src/index.html"
   },
   "author": "rmkubik",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@parcel/resolver-glob": "^2.9.3"
+  }
 }

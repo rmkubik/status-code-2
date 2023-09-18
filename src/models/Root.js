@@ -1,9 +1,11 @@
 import { constructMatrix } from "functional-game-utils";
-import { flow, onSnapshot, types } from "mobx-state-tree";
+import { flow, getSnapshot, onSnapshot, types } from "mobx-state-tree";
 import { createContext, useContext } from "react";
 import Grid from "./Grid";
 import Game from "./Game";
 import wait from "../utils/wait";
+import Inventory from "./Inventory";
+import UnitFactory from "./UnitFactory";
 
 const RootModel = types
   .model({
@@ -12,7 +14,9 @@ const RootModel = types
       "playerActing"
     ),
     grid: Grid,
+    inventory: Inventory,
     game: Game,
+    unitFactory: UnitFactory,
   })
   .actions((self) => ({
     endTurn: flow(function* endTurn() {
@@ -64,105 +68,42 @@ const initialTiles = constructMatrix(
   }
 );
 
-const units = [
-  {
-    location: { row: 3, col: 2 },
-    headIcon: "@",
-    tailIcon: "#",
-    parts: [{ row: 3, col: 2 }],
-    maxLength: 4,
-    name: "Hack.sh",
-    moves: {
-      max: 2,
-    },
-    actionsTaken: {},
-    actions: [
-      {
-        name: "Slash",
-        range: 1,
-        damage: 2,
-      },
-    ],
-    owner: 0,
-  },
-  {
-    location: { row: 7, col: 5 },
-    headIcon: "@",
-    tailIcon: "#",
-    parts: [{ row: 7, col: 5 }],
-    maxLength: 4,
-    name: "Hack.sh",
-    moves: {
-      max: 2,
-    },
-    actionsTaken: {},
-    actions: [
-      {
-        name: "Slash",
-        range: 1,
-        damage: 2,
-      },
-    ],
-    owner: 0,
-  },
-  {
-    location: { row: 8, col: 2 },
-    headIcon: "█",
-    tailIcon: "#",
-    parts: [
-      { row: 8, col: 2 },
-      { row: 8, col: 3 },
-      { row: 8, col: 4 },
-    ],
-    maxLength: 4,
-    name: "Shield",
-    moves: {
-      max: 2,
-    },
-    actionsTaken: {},
-    actions: [
-      {
-        name: "Block",
-        range: 1,
-        damage: 2,
-      },
-    ],
-    owner: 1,
-    brain: {
-      movementStrategy: "towardNearestPlayerUnit",
-    },
-  },
-  {
-    location: { row: 0, col: 8 },
-    headIcon: "█",
-    tailIcon: "#",
-    parts: [{ row: 0, col: 8 }],
-    maxLength: 4,
-    name: "Shield",
-    moves: {
-      max: 2,
-    },
-    actionsTaken: {},
-    actions: [
-      {
-        name: "Block",
-        range: 1,
-        damage: 2,
-      },
-    ],
-    owner: 1,
-    brain: { movementStrategy: "towardNearestPlayerUnit" },
-  },
-];
-
 let initialState = RootModel.create({
   grid: {
     tiles: initialTiles,
-    units,
+    units: [],
   },
   game: {
     playerNumber: 0,
   },
+  inventory: {},
+  unitFactory: {},
+});
+
+initialState.unitFactory.loadUnitFiles();
+initialState.grid.createUnit({
+  location: { row: 3, col: 2 },
+  owner: 0,
+  type: "hack",
+});
+initialState.grid.createUnit({
+  location: { row: 7, col: 5 },
+  owner: 0,
+  type: "hack",
+});
+initialState.grid.createUnit({
+  location: { row: 8, col: 2 },
+  owner: 1,
+  type: "shield",
+  otherParts: [
+    { row: 8, col: 3 },
+    { row: 8, col: 4 },
+  ],
+});
+initialState.grid.createUnit({
+  location: { row: 0, col: 8 },
+  owner: 1,
+  type: "shield",
 });
 
 // if (process.browser) {

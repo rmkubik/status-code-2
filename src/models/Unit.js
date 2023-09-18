@@ -11,7 +11,6 @@ const Unit = types
   .model({
     tailIcon: types.string,
     headIcon: types.string,
-    location: Location,
     parts: types.array(Location),
     maxLength: types.number,
     name: types.string,
