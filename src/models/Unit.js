@@ -1,4 +1,4 @@
-import { getParentOfType, types } from "mobx-state-tree";
+import { flow, getParentOfType, types } from "mobx-state-tree";
 import Location from "./Location";
 import { compareLocations } from "functional-game-utils";
 import addLocations from "../utils/addLocations";
@@ -6,6 +6,8 @@ import { RootModel } from "./Root";
 import Grid from "./Grid";
 import EnemyBrain from "./EnemyBrain";
 import Action from "./Action";
+import wait from "../utils/wait";
+import UnitAnimations from "./UnitAnimations";
 
 const Unit = types
   .model({
@@ -25,6 +27,7 @@ const Unit = types
     actions: types.array(Action),
     owner: types.number,
     brain: types.maybe(EnemyBrain),
+    animations: types.optional(UnitAnimations, {}),
   })
   .views((self) => ({
     get isOutOfMoves() {
@@ -154,13 +157,15 @@ const Unit = types
 
       return root.game.isPlayerNumber(self.owner);
     },
-    takeDamage(damage) {
+    takeDamage: flow(function* takeDamage(damage, location) {
+      yield self.animations.start({ key: "flash", part: location });
+
       self.parts = self.parts.slice(0, self.parts.length - damage);
-    },
+    }),
     getAction(actionIndex) {
       return self.actions[actionIndex];
     },
-    takeAction(actionIndex, location) {
+    takeAction: flow(function* takeAction(actionIndex, location) {
       if (self.isOutOfActions) {
         return;
       }
@@ -173,9 +178,11 @@ const Unit = types
       // action targeting and such here.
 
       const targetUnit = grid.getUnitAtLocation(location);
-      targetUnit.takeDamage(action.damage);
+
+      yield targetUnit.takeDamage(action.damage, location);
+
       self.actionsTaken.current += 1;
-    },
+    }),
     getMoveTarget() {
       if (!self.brain) {
         return undefined;

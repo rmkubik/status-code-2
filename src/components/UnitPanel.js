@@ -1,5 +1,6 @@
 import React from "react";
 import { useRootStore } from "../models/Root";
+import { observer } from "mobx-react-lite";
 
 const getButtonClasses = ({ isSelected, isOutOfActions }) => {
   let classes = "";
@@ -15,7 +16,7 @@ const getButtonClasses = ({ isSelected, isOutOfActions }) => {
   return classes;
 };
 
-const UnitPanel = ({ unit }) => {
+const UnitPanel = observer(({ unit }) => {
   const { game } = useRootStore();
 
   return (
@@ -60,6 +61,6 @@ const UnitPanel = ({ unit }) => {
       </ul>
     </div>
   );
-};
+});
 
 export default UnitPanel;

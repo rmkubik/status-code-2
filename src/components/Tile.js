@@ -45,8 +45,7 @@ const Tile = observer(
     const { grid } = useRootStore();
 
     const unitOnTile = grid.getUnitAtLocation(location);
-    const isHead =
-      unitOnTile && compareLocations(unitOnTile.parts[0], location);
+    const isHead = unitOnTile && compareLocations(unitOnTile.head, location);
 
     let borders = {
       up: false,
@@ -55,6 +54,7 @@ const Tile = observer(
       right: false,
     };
     let tileIcon = tile.icon;
+    let className = "";
 
     if (unitOnTile) {
       if (isHead) {
@@ -64,6 +64,13 @@ const Tile = observer(
       }
 
       borders = unitOnTile.getPartBorders(location);
+
+      const animation =
+        unitOnTile.animations.getFirstAnimationForLocation(location);
+
+      if (animation) {
+        className += "animated flash ";
+      }
     }
 
     if (isMoveTarget) {
@@ -82,6 +89,7 @@ const Tile = observer(
         owner={unitOnTile?.owner}
         isActionTarget={isActionTarget}
         onClick={onClick}
+        className={className}
       >
         {tileIcon}
       </TileContainer>
