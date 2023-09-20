@@ -12,6 +12,8 @@ const GridContainer = styled.div`
   text-align: center;
   cursor: pointer;
   user-select: none;
+
+  color: #333333;
 `;
 
 const Grid = observer(({ renderTile = () => {} }) => {

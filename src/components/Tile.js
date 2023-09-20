@@ -35,8 +35,9 @@ const TileContainer = styled.div`
   border-style: ${(props) => (props.isSelected ? "dashed" : "")};
   border-color: ${(props) => (props.isSelected ? "white" : "")};
 
+  color: ${(props) => (props.isMoveTarget ? "white" : "")};
+  color: ${(props) => (props.isActionTarget ? "white" : "")};
   color: ${(props) => (props.isUnit ? "white" : "")};
-  /* color: ${(props) => (props.isActionTarget ? "red" : "")}; */
   background-color: ${getBgColor};
 `;
 
@@ -87,6 +88,7 @@ const Tile = observer(
         isUnit={Boolean(unitOnTile)}
         borders={borders}
         owner={unitOnTile?.owner}
+        isMoveTarget={isMoveTarget}
         isActionTarget={isActionTarget}
         onClick={onClick}
         className={className}
