@@ -69,7 +69,7 @@ const Tile = observer(
         unitOnTile.animations.getFirstAnimationForLocation(location);
 
       if (animation) {
-        className += "animated flash ";
+        className += `animated ${animation.key} `;
       }
     }
 

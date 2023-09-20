@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import flash from "./animations/flash";
+import animations from "./animations/*.js";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -35,7 +35,7 @@ const GlobalStyle = createGlobalStyle`
     }
   }
 
-  ${flash}
+  ${Object.values(animations).map((animationModule) => animationModule.default)}
 
   .animated {
     animation-fill-mode: both;

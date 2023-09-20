@@ -1,4 +1,4 @@
-import { flow, getParentOfType, types } from "mobx-state-tree";
+import { flow, getParentOfType, getSnapshot, types } from "mobx-state-tree";
 import Location from "./Location";
 import { compareLocations } from "functional-game-utils";
 import addLocations from "../utils/addLocations";
@@ -179,6 +179,14 @@ const Unit = types
 
       const targetUnit = grid.getUnitAtLocation(location);
 
+      if (self.owner !== 0) {
+        // Only animate the enemy attack
+        // this way.
+        yield self.animations.start({
+          key: "pulse",
+          part: getSnapshot(self.head),
+        });
+      }
       yield targetUnit.takeDamage(action.damage, location);
 
       self.actionsTaken.current += 1;

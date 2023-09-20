@@ -31,7 +31,7 @@ const UnitAnimations = types
       const guid = generateUuid();
       self.anims.push({ key, part, guid });
 
-      yield wait(animationDurations.flash);
+      yield wait(animationDurations[key]);
 
       self.remove(guid);
     }),

@@ -34,6 +34,7 @@ const RootModel = types
 
           if (moveTarget) {
             enemyUnit.move(moveTarget);
+            yield wait(200);
           } else {
             const actionIndex = 0;
             const actionTarget = enemyUnit.getActionTarget(actionIndex);
@@ -42,10 +43,8 @@ const RootModel = types
               break;
             }
 
-            enemyUnit.takeAction(actionIndex, actionTarget);
+            yield enemyUnit.takeAction(actionIndex, actionTarget);
           }
-
-          yield wait(200);
         }
       }
 
