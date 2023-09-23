@@ -1,0 +1,38 @@
+tiles: |
+  . . . . . . . . . .
+  . . . . . . . . . .
+  . . . . . . . . . .
+  . . . . . . . . . .
+  . . . . . . . . . .
+  . . . . . . . . . .
+  . . . . . . . . . .
+  . . . . . . . . . .
+  . . . . . . . . . .
+  . . . . . . . . . .
+
+units:
+  - type: hack
+    owner: 0
+    location:
+      row: 3
+      col: 2
+  - type: hack
+    owner: 0
+    location:
+      row: 7
+      col: 5
+  - type: shield
+    owner: 1
+    location:
+      row: 8
+      col: 2
+    otherParts:
+      - row: 8
+        col: 3
+      - row: 8
+        col: 4
+  - type: shield
+    owner: 1
+    location:
+      row: 0
+      col: 8

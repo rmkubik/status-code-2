@@ -1,4 +1,7 @@
-import { constructMatrix } from "functional-game-utils";
+import {
+  constructMatrix,
+  constructMatrixFromTemplate,
+} from "functional-game-utils";
 import { flow, getSnapshot, onSnapshot, types } from "mobx-state-tree";
 import { createContext, useContext } from "react";
 import Grid from "./Grid";
@@ -22,6 +25,18 @@ const RootModel = types
   .actions((self) => ({
     changeScene(newScene) {
       self.scene = newScene;
+    },
+    startBattle(level) {
+      self.grid = Grid.create({
+        tiles: constructMatrixFromTemplate((icon) => ({ icon }), level.tiles),
+        units: [],
+      });
+
+      level.units.forEach((unit) => {
+        self.grid.createUnit(unit);
+      });
+
+      self.changeScene("battleIntro");
     },
     endTurn: flow(function* endTurn() {
       self.state = "enemyActing";
@@ -85,30 +100,6 @@ let initialState = RootModel.create({
 });
 
 initialState.unitFactory.loadUnitFiles();
-initialState.grid.createUnit({
-  location: { row: 3, col: 2 },
-  owner: 0,
-  type: "hack",
-});
-initialState.grid.createUnit({
-  location: { row: 7, col: 5 },
-  owner: 0,
-  type: "hack",
-});
-initialState.grid.createUnit({
-  location: { row: 8, col: 2 },
-  owner: 1,
-  type: "shield",
-  otherParts: [
-    { row: 8, col: 3 },
-    { row: 8, col: 4 },
-  ],
-});
-initialState.grid.createUnit({
-  location: { row: 0, col: 8 },
-  owner: 1,
-  type: "shield",
-});
 
 // if (process.browser) {
 //   const data = localStorage.getItem("rootState");

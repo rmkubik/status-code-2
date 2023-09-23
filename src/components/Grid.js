@@ -1,7 +1,6 @@
 import React from "react";
 import { getDimensions, mapMatrix } from "functional-game-utils";
 import styled from "styled-components";
-import { useRootStore } from "../models/Root";
 import { observer } from "mobx-react-lite";
 
 const GridContainer = styled.div`
@@ -16,16 +15,15 @@ const GridContainer = styled.div`
   color: #333333;
 `;
 
-const Grid = observer(({ renderTile = () => {} }) => {
-  const { grid } = useRootStore();
-  const { width } = getDimensions(grid.tiles);
+const Grid = observer(({ tiles, renderTile = () => {} }) => {
+  const { width } = getDimensions(tiles);
 
   return (
     <GridContainer
       width={width}
       onContextMenu={(event) => event.preventDefault()}
     >
-      {mapMatrix((tile, location) => renderTile(tile, location), grid.tiles)}
+      {mapMatrix((tile, location) => renderTile(tile, location), tiles)}
     </GridContainer>
   );
 });

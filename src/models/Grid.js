@@ -9,7 +9,7 @@ import Unit from "./Unit";
 import isTruthy from "../utils/isTruthy";
 import { RootModel } from "./Root";
 
-const Tile = types
+export const Tile = types
   .model({
     icon: types.string,
   })

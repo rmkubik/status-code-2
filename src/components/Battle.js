@@ -1,21 +1,21 @@
 import { compareLocations } from "functional-game-utils";
 import React, { useState } from "react";
 import { useRootStore } from "../models/Root";
-import Grid from "./Grid";
+import BattleGrid from "./BattleGrid";
 import Tile from "./Tile";
 import UnitPanel from "./UnitPanel";
 import { observer } from "mobx-react-lite";
 
 const Battle = observer(() => {
   const [selected, setSelected] = useState();
-  const { grid, game, endTurn, state } = useRootStore();
+  const { grid, game, endTurn, state, changeScene } = useRootStore();
 
   const { selectedActionIndex } = game;
   const selectedUnit = grid.getUnitAtLocation(selected);
 
   return (
     <>
-      <Grid
+      <BattleGrid
         renderTile={(tile, location) => {
           const isSelected = selected && compareLocations(selected, location);
           const isUnitSelected = Boolean(selectedUnit);
@@ -81,6 +81,7 @@ const Battle = observer(() => {
         >
           End Turn
         </button>
+        <button onClick={() => changeScene("map")}>Disconnect</button>
       </div>
       <UnitPanel unit={selectedUnit} />
     </>

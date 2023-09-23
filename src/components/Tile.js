@@ -38,13 +38,22 @@ const TileContainer = styled.div`
   color: ${(props) => (props.isMoveTarget ? "white" : "")};
   color: ${(props) => (props.isActionTarget ? "white" : "")};
   color: ${(props) => (props.isUnit ? "white" : "")};
+  color: ${(props) => (props.isMapTile ? "white" : "")};
   background-color: ${getBgColor};
 
   font-size: ${(props) => props.theme.tileFontSize}px;
 `;
 
 const Tile = observer(
-  ({ tile, location, isSelected, isMoveTarget, isActionTarget, onClick }) => {
+  ({
+    tile,
+    location,
+    isSelected,
+    isMoveTarget,
+    isActionTarget,
+    isMapTile,
+    onClick,
+  }) => {
     const { grid } = useRootStore();
 
     const unitOnTile = grid.getUnitAtLocation(location);
@@ -84,6 +93,12 @@ const Tile = observer(
       tileIcon = "⚔";
     }
 
+    if (isMapTile) {
+      if (tileIcon === ".") {
+        tileIcon = "";
+      }
+    }
+
     return (
       <TileContainer
         isSelected={isSelected}
@@ -92,6 +107,7 @@ const Tile = observer(
         owner={unitOnTile?.owner}
         isMoveTarget={isMoveTarget}
         isActionTarget={isActionTarget}
+        isMapTile={isMapTile}
         onClick={onClick}
         className={className}
       >
