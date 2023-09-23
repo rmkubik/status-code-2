@@ -1,11 +1,11 @@
-import { typecheck, types } from "mobx-state-tree";
+import { getSnapshot, typecheck, types } from "mobx-state-tree";
 import UnitData from "./UnitData";
 import unitFiles from "../../data/units/*.js";
 import UnitLevelData from "./UnitLevelData";
 
 const UnitFactory = types
-  .model({
-    unitData: types.optional(types.array(UnitData), []),
+  .model("UnitFactory", {
+    unitData: types.map(UnitData),
   })
   .actions((self) => ({
     loadUnitFiles() {
@@ -18,20 +18,22 @@ const UnitFactory = types
           }
         })
         .forEach(([key, unitData]) => {
-          self.unitData[key] = unitData;
+          self.unitData.set(key, unitData);
         });
     },
-    create(unitLevelData) {
+    create(unitLevelDataRaw) {
+      let unitLevelData;
+
       try {
-        typecheck(UnitLevelData, unitLevelData);
+        unitLevelData = UnitLevelData.create(unitLevelDataRaw);
       } catch (error) {
-        console.log("Failed to create unit from level data: ", error);
+        console.error("Failed to create unit from level data: ", error);
         return;
       }
 
-      const { type, ...unitArgs } = unitLevelData;
+      const { type, ...unitArgs } = getSnapshot(unitLevelData);
 
-      return self.unitData[type].createUnit(unitArgs);
+      return self.unitData.get(type).createUnit(unitArgs);
     },
   }));
 

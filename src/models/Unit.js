@@ -10,7 +10,7 @@ import wait from "../utils/wait";
 import UnitAnimations from "./UnitAnimations";
 
 const Unit = types
-  .model({
+  .model("Unit", {
     tailIcon: types.string,
     headIcon: types.string,
     parts: types.array(Location),

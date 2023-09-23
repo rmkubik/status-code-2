@@ -48,6 +48,13 @@ function padEndRows(matrix, value) {
 
 padEndRows(tiles, { icon: "." });
 
+// https://www.compart.com/en/unicode/block/U+2500
+function isBoxDrawingChar(char) {
+  const charCode = char.charCodeAt(0);
+
+  return charCode >= 0x2500 && charCode <= 0x257f;
+}
+
 const Map = observer(() => {
   const { startBattle } = useRootStore();
 
@@ -61,8 +68,8 @@ const Map = observer(() => {
             isMapTile
             tile={tile}
             onClick={() => {
-              if (isInt(tile.icon)) {
-                startBattle(level1);
+              if (!isBoxDrawingChar(tile.icon) && tile.icon !== ".") {
+                startBattle(tile.icon);
               }
             }}
           />

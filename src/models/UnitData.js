@@ -1,10 +1,10 @@
-import { getSnapshot, types } from "mobx-state-tree";
+import { getParent, getSnapshot, types } from "mobx-state-tree";
 import Unit from "./Unit";
 import Action from "./Action";
 import EnemyBrain from "./EnemyBrain";
 
 const UnitData = types
-  .model({
+  .model("UnitData", {
     headIcon: types.string,
     tailIcon: types.string,
     maxLength: types.number,
@@ -18,6 +18,8 @@ const UnitData = types
   .actions((self) => ({
     createUnit({ location, owner, otherParts = [] }) {
       const snapshot = getSnapshot(self);
+
+      // console.log(getParent(self));
 
       return Unit.create({
         ...snapshot,

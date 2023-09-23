@@ -3,7 +3,7 @@ import Unit from "./Unit";
 import Grid from "./Grid";
 
 const Action = types
-  .model({
+  .model("Action", {
     name: types.string,
     range: types.number,
     damage: types.number,

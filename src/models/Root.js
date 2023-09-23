@@ -10,7 +10,7 @@ import createGridFromLevel from "../utils/createGridFromLevel";
 import LevelLoader from "./LevelLoader";
 
 const RootModel = types
-  .model({
+  .model("Root", {
     state: types.optional(
       types.enumeration(["playerActing", "enemyActing"]),
       "playerActing"
@@ -27,7 +27,7 @@ const RootModel = types
       self.scene = newScene;
     },
     startBattle(level) {
-      self.grid = createGridFromLevel(level, self.unitFactory);
+      self.grid = self.levelLoader.create(level);
 
       self.changeScene("battleIntro");
     },

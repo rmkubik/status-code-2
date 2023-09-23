@@ -18,7 +18,7 @@ const UnitAnimation = types.model({
 });
 
 const UnitAnimations = types
-  .model({
+  .model("UnitAnimations", {
     anims: types.optional(types.array(UnitAnimation), []),
   })
   .views((self) => ({

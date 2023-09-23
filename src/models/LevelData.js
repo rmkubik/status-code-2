@@ -1,8 +1,17 @@
-import { types } from "mobx-state-tree";
+import {
+  getParent,
+  getParentOfType,
+  getSnapshot,
+  types,
+} from "mobx-state-tree";
 import UnitLevelData from "./UnitLevelData";
+import { constructMatrixFromTemplate } from "functional-game-utils";
+import isInt from "../utils/isInt";
+import Grid from "./Grid";
+import { RootModel } from "./Root";
 
 const LevelData = types
-  .model({
+  .model("LevelData", {
     tiles: types.string,
     units: types.array(UnitLevelData),
   })
@@ -14,10 +23,11 @@ const LevelData = types
         let icon = char;
 
         if (isInt(char)) {
+          const unitSnapshot = getSnapshot(self.units[parseInt(char)]);
           // This is a unit spawn location
           units.push({
+            ...unitSnapshot,
             location,
-            ...self.units[parseInt(char)],
           });
           // After handling unit, mark tile as empty.
           icon = ".";
@@ -33,8 +43,9 @@ const LevelData = types
         units: [],
       });
 
+      const { unitFactory } = getParentOfType(self, RootModel);
       units.forEach((unit) => {
-        grid.createUnit(unit);
+        grid.createUnit(unit, unitFactory);
       });
 
       return grid;

@@ -24,7 +24,7 @@ import isTruthy from "../utils/isTruthy";
 // - NON ATTACK actions
 
 const EnemyBrain = types
-  .model({
+  .model("EnemyBrain", {
     movementStrategy: types.optional(
       types.enumeration(["random", "towardNearestPlayerUnit"]),
       "random"

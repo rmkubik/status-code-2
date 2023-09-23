@@ -3,7 +3,7 @@ import levelFiles from "../../data/levels/*.yaml";
 import LevelData from "./LevelData";
 
 const LevelLoader = types
-  .model({
+  .model("LevelLoader", {
     levelData: types.map(LevelData),
   })
   .actions((self) => ({
@@ -17,11 +17,16 @@ const LevelLoader = types
           }
         })
         .forEach(([key, levelData]) => {
-          self.levelData[key] = levelData;
+          self.levelData.set(key, levelData);
         });
     },
     create(key) {
-      return self.levelData[key].createGrid();
+      if (!self.levelData.get(key)) {
+        console.error(`Failed to create level "${key}". Does not exist!`);
+        return;
+      }
+
+      return self.levelData.get(key).createGrid();
     },
   }));
 

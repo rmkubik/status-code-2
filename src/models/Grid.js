@@ -10,7 +10,7 @@ import isTruthy from "../utils/isTruthy";
 import { RootModel } from "./Root";
 
 export const Tile = types
-  .model({
+  .model("Tile", {
     icon: types.string,
   })
   .views((self) => ({
@@ -34,7 +34,7 @@ const TileRow = types.array(Tile);
 export const Tiles = types.optional(types.array(TileRow), []);
 
 const Grid = types
-  .model({
+  .model("Grid", {
     tiles: Tiles,
     units: types.optional(types.array(Unit), []),
   })

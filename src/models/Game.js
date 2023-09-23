@@ -1,7 +1,7 @@
 import { types } from "mobx-state-tree";
 
 const Game = types
-  .model({
+  .model("Game", {
     currentTurn: types.optional(types.number, 0),
     playerNumber: types.literal(0),
     selectedActionIndex: types.optional(types.number, -1),
