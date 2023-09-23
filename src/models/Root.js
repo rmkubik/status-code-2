@@ -17,8 +17,12 @@ const RootModel = types
     inventory: Inventory,
     game: Game,
     unitFactory: UnitFactory,
+    scene: types.enumeration(["mainMenu", "map", "battleIntro", "battle"]),
   })
   .actions((self) => ({
+    changeScene(newScene) {
+      self.scene = newScene;
+    },
     endTurn: flow(function* endTurn() {
       self.state = "enemyActing";
 
@@ -77,6 +81,7 @@ let initialState = RootModel.create({
   },
   inventory: {},
   unitFactory: {},
+  scene: "mainMenu",
 });
 
 initialState.unitFactory.loadUnitFiles();

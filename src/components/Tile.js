@@ -39,6 +39,8 @@ const TileContainer = styled.div`
   color: ${(props) => (props.isActionTarget ? "white" : "")};
   color: ${(props) => (props.isUnit ? "white" : "")};
   background-color: ${getBgColor};
+
+  font-size: ${(props) => props.theme.tileFontSize}px;
 `;
 
 const Tile = observer(
