@@ -1,26 +1,18 @@
 tiles: |
+  . . . . . . . . 2 .
+  . . . . . . . . . .
+  . . . . . . . . . .
+  . . 0 . . . . . . .
   . . . . . . . . . .
   . . . . . . . . . .
   . . . . . . . . . .
-  . . . . . . . . . .
-  . . . . . . . . . .
-  . . . . . . . . . .
-  . . . . . . . . . .
-  . . . . . . . . . .
-  . . . . . . . . . .
+  . . . . . 0 . . . .
+  . . 1 . . . . . . .
   . . . . . . . . . .
 
 units:
   - type: hack
     owner: 0
-    location:
-      row: 3
-      col: 2
-  - type: hack
-    owner: 0
-    location:
-      row: 7
-      col: 5
   - type: shield
     owner: 1
     location:
@@ -33,6 +25,3 @@ units:
         col: 4
   - type: shield
     owner: 1
-    location:
-      row: 0
-      col: 8

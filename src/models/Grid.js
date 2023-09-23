@@ -84,8 +84,11 @@ const Grid = types
     resetUnitsForNewTurn() {
       self.units.forEach((unit) => unit.resetForNewTurn());
     },
-    createUnit({ location, owner, type, otherParts }) {
-      const { unitFactory } = getParentOfType(self, RootModel);
+    createUnit({ location, owner, type, otherParts }, unitFactory) {
+      if (!unitFactory) {
+        unitFactory = getParentOfType(self, RootModel).unitFactory;
+      }
+
       const newUnit = unitFactory.create({ location, owner, type, otherParts });
 
       self.units.push(newUnit);

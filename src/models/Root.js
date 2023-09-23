@@ -10,6 +10,45 @@ import wait from "../utils/wait";
 import Inventory from "./Inventory";
 import UnitFactory from "./UnitFactory";
 
+function isInt(string) {
+  const result = parseInt(string, 10);
+
+  return !isNaN(result);
+}
+
+function createGridFromLevel(level, unitFactory) {
+  const units = [];
+
+  const tiles = constructMatrixFromTemplate((char, location) => {
+    let icon = char;
+
+    if (isInt(char)) {
+      // This is a unit spawn location
+      units.push({
+        location,
+        ...level.units[parseInt(char)],
+      });
+      // After handling unit, mark tile as empty.
+      icon = ".";
+    }
+
+    return {
+      icon,
+    };
+  }, level.tiles);
+
+  const grid = Grid.create({
+    tiles,
+    units: [],
+  });
+
+  units.forEach((unit) => {
+    grid.createUnit(unit, unitFactory);
+  });
+
+  return grid;
+}
+
 const RootModel = types
   .model({
     state: types.optional(
@@ -27,14 +66,7 @@ const RootModel = types
       self.scene = newScene;
     },
     startBattle(level) {
-      self.grid = Grid.create({
-        tiles: constructMatrixFromTemplate((icon) => ({ icon }), level.tiles),
-        units: [],
-      });
-
-      level.units.forEach((unit) => {
-        self.grid.createUnit(unit);
-      });
+      self.grid = createGridFromLevel(level, self.unitFactory);
 
       self.changeScene("battleIntro");
     },
