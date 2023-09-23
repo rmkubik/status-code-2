@@ -80,13 +80,15 @@ const Battle = observer(() => {
       <div
         style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
       >
+        {game.state === "victory" && <p>Victory!</p>}
+        {game.state === "defeat" && <p>Defeat!</p>}
         <p style={{ marginRight: "1rem" }}>Turn: {game.currentTurn + 1}</p>
         <button disabled={game.state !== "playerActing"} onClick={game.endTurn}>
           End Turn
         </button>
         <button onClick={() => changeScene("map")}>Disconnect</button>
       </div>
-      <UnitPanel unit={selectedUnit} />
+      <UnitPanel unit={selectedUnit} location={selected} />
       {game.state === "deployment" && (
         <>
           <MyPrograms mode="deployment" selectedLocation={selected} />

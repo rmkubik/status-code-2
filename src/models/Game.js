@@ -38,16 +38,17 @@ const Game = types
       // TODO:
       // Support other victory and loss conditions
       const { grid } = getParentOfType(self, RootModel);
-      const playerUnits = grid.getUnitsByOwner(0);
-      const enemyUnits = grid.getUnitsByOwner(1);
+      const isUnitAlive = (unit) => !unit.isDead;
+      const livingPlayerUnits = grid.getUnitsByOwner(0).filter(isUnitAlive);
+      const livingEnemyUnits = grid.getUnitsByOwner(1).filter(isUnitAlive);
 
-      if (playerUnits.length === 0) {
+      if (livingPlayerUnits.length === 0) {
         self.state = "defeat";
         return;
       }
 
-      if (enemyUnits.length === 0) {
-        self.state === "victory";
+      if (livingEnemyUnits.length === 0) {
+        self.state = "victory";
         return;
       }
 

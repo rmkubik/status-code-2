@@ -5,11 +5,11 @@ import { useRootStore } from "../models/Root";
 import { observer } from "mobx-react-lite";
 
 const getBgColor = (props) => {
-  if (props.isDeployLocation) {
-    return "lightgray";
-  }
-
   if (!props.isUnit) {
+    if (props.isDeployLocation) {
+      return "lightgray";
+    }
+
     return "";
   }
 

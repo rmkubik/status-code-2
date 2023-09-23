@@ -16,12 +16,24 @@ const getButtonClasses = ({ isSelected, isOutOfActions }) => {
   return classes;
 };
 
-const UnitPanel = observer(({ unit }) => {
-  const { game } = useRootStore();
+const getUnitName = ({ unit, location, grid }) => {
+  if (unit) {
+    return unit.name;
+  }
+
+  if (location && grid.isDeployLocation(location)) {
+    return "Deploy Location";
+  }
+
+  return "None Selected";
+};
+
+const UnitPanel = observer(({ unit, location }) => {
+  const { game, grid } = useRootStore();
 
   return (
     <div>
-      <p>{unit?.name ?? "None Selected"}</p>
+      <p>{getUnitName({ unit, location, grid })}</p>
       <p>
         Length: {unit?.parts.length ?? "?"}/{unit?.maxLength ?? "?"}
       </p>

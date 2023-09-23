@@ -10,10 +10,6 @@ import LevelLoader from "./LevelLoader";
 
 const RootModel = types
   .model("Root", {
-    state: types.optional(
-      types.enumeration(["playerActing", "enemyActing"]),
-      "playerActing"
-    ),
     grid: Grid,
     inventory: Inventory,
     game: Game,
