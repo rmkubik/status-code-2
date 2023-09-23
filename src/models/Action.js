@@ -27,18 +27,21 @@ const Action = types
             unit.head,
             self.range
           );
+          break;
         case "diamond":
           locationsInShape = getLocationsInDiamond(
             grid.tiles,
             unit.head,
             self.range
           );
+          break;
         case "square":
           locationsInShape = getLocationsInSquare(
             grid.tiles,
             unit.head,
             self.range
           );
+          break;
       }
 
       // Remove unit's head

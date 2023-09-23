@@ -1,16 +1,16 @@
 export default {
-  headIcon: "█",
+  headIcon: "▯",
   tailIcon: "#",
-  maxLength: 3,
-  name: "Shield",
+  maxLength: 4,
+  name: "Shield+",
   moves: {
     max: 1,
   },
   actions: [
     {
-      name: "Block",
+      name: "Block+",
       range: 1,
-      damage: 1,
+      damage: 2,
       shape: "cross",
     },
   ],

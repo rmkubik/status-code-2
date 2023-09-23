@@ -22,5 +22,5 @@ units:
         col: 3
       - row: 8
         col: 4
-  - type: shield
+  - type: shield2
     owner: 1
