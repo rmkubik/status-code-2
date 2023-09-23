@@ -11,6 +11,7 @@ export default {
       name: "Slash",
       range: 1,
       damage: 2,
+      shape: "cross",
     },
   ],
 };

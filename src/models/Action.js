@@ -1,26 +1,50 @@
 import { getParentOfType, types } from "mobx-state-tree";
 import Unit from "./Unit";
 import Grid from "./Grid";
+import getLocationsInCross from "../utils/getLocationsInCross";
+import getLocationsInDiamond from "../utils/getLocationsInDiamond";
+import { compareLocations } from "functional-game-utils";
+import getLocationsInSquare from "../utils/getLocationsInSquare";
 
 const Action = types
   .model("Action", {
     name: types.string,
     range: types.number,
     damage: types.number,
+    shape: types.enumeration(["cross", "diamond", "square"]),
   })
   .views((self) => ({
     getLocationsInRange() {
       const grid = getParentOfType(self, Grid);
       const unit = getParentOfType(self, Unit);
 
-      // TODO:
-      // Hard code action to just get neighbors
-      // Actually need to support more advanced
-      // targeting shapes in the future!
+      let locationsInShape = [];
 
-      const neighbors = grid.getNeighbors(unit.head);
+      switch (self.shape) {
+        case "cross":
+          locationsInShape = getLocationsInCross(
+            grid.tiles,
+            unit.head,
+            self.range
+          );
+        case "diamond":
+          locationsInShape = getLocationsInDiamond(
+            grid.tiles,
+            unit.head,
+            self.range
+          );
+        case "square":
+          locationsInShape = getLocationsInSquare(
+            grid.tiles,
+            unit.head,
+            self.range
+          );
+      }
 
-      return neighbors;
+      // Remove unit's head
+      return locationsInShape.filter(
+        (location) => !compareLocations(location, unit.head)
+      );
     },
   }));
 
