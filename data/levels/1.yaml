@@ -15,9 +15,6 @@ units:
     owner: 0
   - type: shield
     owner: 1
-    location:
-      row: 8
-      col: 2
     otherParts:
       - row: 8
         col: 3

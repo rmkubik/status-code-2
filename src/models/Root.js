@@ -1,7 +1,4 @@
-import {
-  constructMatrix,
-  constructMatrixFromTemplate,
-} from "functional-game-utils";
+import { constructMatrix } from "functional-game-utils";
 import { flow, getSnapshot, onSnapshot, types } from "mobx-state-tree";
 import { createContext, useContext } from "react";
 import Grid from "./Grid";
@@ -9,45 +6,8 @@ import Game from "./Game";
 import wait from "../utils/wait";
 import Inventory from "./Inventory";
 import UnitFactory from "./UnitFactory";
-
-function isInt(string) {
-  const result = parseInt(string, 10);
-
-  return !isNaN(result);
-}
-
-function createGridFromLevel(level, unitFactory) {
-  const units = [];
-
-  const tiles = constructMatrixFromTemplate((char, location) => {
-    let icon = char;
-
-    if (isInt(char)) {
-      // This is a unit spawn location
-      units.push({
-        location,
-        ...level.units[parseInt(char)],
-      });
-      // After handling unit, mark tile as empty.
-      icon = ".";
-    }
-
-    return {
-      icon,
-    };
-  }, level.tiles);
-
-  const grid = Grid.create({
-    tiles,
-    units: [],
-  });
-
-  units.forEach((unit) => {
-    grid.createUnit(unit, unitFactory);
-  });
-
-  return grid;
-}
+import createGridFromLevel from "../utils/createGridFromLevel";
+import LevelLoader from "./LevelLoader";
 
 const RootModel = types
   .model({
@@ -59,6 +19,7 @@ const RootModel = types
     inventory: Inventory,
     game: Game,
     unitFactory: UnitFactory,
+    levelLoader: LevelLoader,
     scene: types.enumeration(["mainMenu", "map", "battleIntro", "battle"]),
   })
   .actions((self) => ({
@@ -128,10 +89,12 @@ let initialState = RootModel.create({
   },
   inventory: {},
   unitFactory: {},
+  levelLoader: {},
   scene: "mainMenu",
 });
 
 initialState.unitFactory.loadUnitFiles();
+initialState.levelLoader.loadLevelFiles();
 
 // if (process.browser) {
 //   const data = localStorage.getItem("rootState");

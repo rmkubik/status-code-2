@@ -1,6 +1,7 @@
-import { types } from "mobx-state-tree";
+import { typecheck, types } from "mobx-state-tree";
 import UnitData from "./UnitData";
 import unitFiles from "../../data/units/*.js";
+import UnitLevelData from "./UnitLevelData";
 
 const UnitFactory = types
   .model({
@@ -20,8 +21,17 @@ const UnitFactory = types
           self.unitData[key] = unitData;
         });
     },
-    create({ location, owner, type, otherParts }) {
-      return self.unitData[type].createUnit({ location, owner, otherParts });
+    create(unitLevelData) {
+      try {
+        typecheck(UnitLevelData, unitLevelData);
+      } catch (error) {
+        console.log("Failed to create unit from level data: ", error);
+        return;
+      }
+
+      const { type, ...unitArgs } = unitLevelData;
+
+      return self.unitData[type].createUnit(unitArgs);
     },
   }));
 

@@ -11,6 +11,7 @@ import Tile from "./Tile";
 import { observer } from "mobx-react-lite";
 import { Tile as TileModel } from "../models/Grid";
 import level1 from "../../data/levels/1.yaml";
+import isInt from "../utils/isInt";
 
 const mapWithDots = map.replaceAll(" ", ".");
 let mapWithSpaces = "";
@@ -60,7 +61,9 @@ const Map = observer(() => {
             isMapTile
             tile={tile}
             onClick={() => {
-              startBattle(level1);
+              if (isInt(tile.icon)) {
+                startBattle(level1);
+              }
             }}
           />
         )}

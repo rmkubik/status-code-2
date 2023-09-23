@@ -31,10 +31,11 @@ export const Tile = types
   }));
 
 const TileRow = types.array(Tile);
+export const Tiles = types.optional(types.array(TileRow), []);
 
 const Grid = types
   .model({
-    tiles: types.optional(types.array(TileRow), []),
+    tiles: Tiles,
     units: types.optional(types.array(Unit), []),
   })
   .views((self) => ({
