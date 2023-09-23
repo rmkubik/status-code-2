@@ -6,6 +6,14 @@ const LevelLoader = types
   .model("LevelLoader", {
     levelData: types.map(LevelData),
   })
+  .views((self) => ({
+    has(key) {
+      return self.levelData.has(key);
+    },
+    getName(key) {
+      return self.levelData.get(key).name;
+    },
+  }))
   .actions((self) => ({
     loadLevelFiles() {
       Object.entries(levelFiles)
@@ -19,12 +27,6 @@ const LevelLoader = types
         .forEach(([key, levelData]) => {
           self.levelData.set(key, levelData);
         });
-    },
-    has(key) {
-      return self.levelData.has(key);
-    },
-    getName(key) {
-      return self.levelData.get(key).name;
     },
     create(key) {
       if (!self.levelData.get(key)) {

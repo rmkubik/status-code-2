@@ -5,6 +5,10 @@ import { useRootStore } from "../models/Root";
 import { observer } from "mobx-react-lite";
 
 const getBgColor = (props) => {
+  if (props.isDeployLocation) {
+    return "lightgray";
+  }
+
   if (!props.isUnit) {
     return "";
   }
@@ -52,6 +56,7 @@ const Tile = observer(
     isMoveTarget,
     isActionTarget,
     isMapTile,
+    isDeployLocation,
     onClick,
   }) => {
     const { grid } = useRootStore();
@@ -108,6 +113,7 @@ const Tile = observer(
         isMoveTarget={isMoveTarget}
         isActionTarget={isActionTarget}
         isMapTile={isMapTile}
+        isDeployLocation={isDeployLocation}
         onClick={onClick}
         className={className}
       >

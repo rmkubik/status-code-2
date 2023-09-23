@@ -8,6 +8,7 @@ import { getParentOfType, types } from "mobx-state-tree";
 import Unit from "./Unit";
 import isTruthy from "../utils/isTruthy";
 import { RootModel } from "./Root";
+import Location from "./Location";
 
 export const Tile = types
   .model("Tile", {
@@ -37,6 +38,7 @@ const Grid = types
   .model("Grid", {
     tiles: Tiles,
     units: types.optional(types.array(Unit), []),
+    deployLocations: types.array(Location),
   })
   .views((self) => ({
     getUnitAtLocation(location) {
@@ -80,11 +82,17 @@ const Grid = types
     getUnitsByOwner(owner) {
       return self.units.filter((unit) => unit.owner === owner);
     },
+    isDeployLocation(location) {
+      return self.deployLocations.some((deployLocation) =>
+        compareLocations(location, deployLocation)
+      );
+    },
   }))
   .actions((self) => ({
     resetUnitsForNewTurn() {
       self.units.forEach((unit) => unit.resetForNewTurn());
     },
+    // This is UnitLevelData, NOT UnitData
     createUnit({ location, owner, type, otherParts }, unitFactory) {
       if (!unitFactory) {
         unitFactory = getParentOfType(self, RootModel).unitFactory;

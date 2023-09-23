@@ -1,0 +1,14 @@
+name: www.shield.tutorial.com
+
+tiles: |
+  . . . . . . . 
+  . 0 . . . 0 . 
+  . . . . . . . 
+  . . . . . . . 
+  . . . . . . . 
+  . . . . . . . 
+  . * . . . * .
+
+units:
+  - type: shield
+    owner: 1

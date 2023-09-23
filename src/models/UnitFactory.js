@@ -1,4 +1,4 @@
-import { getSnapshot, typecheck, types } from "mobx-state-tree";
+import { getSnapshot, types } from "mobx-state-tree";
 import UnitData from "./UnitData";
 import unitFiles from "../../data/units/*.js";
 import UnitLevelData from "./UnitLevelData";
@@ -7,6 +7,17 @@ const UnitFactory = types
   .model("UnitFactory", {
     unitData: types.map(UnitData),
   })
+  .views((self) => ({
+    get unitKeys() {
+      return self.unitData.keys();
+    },
+    isValidKey(key) {
+      return self.unitData.has(key);
+    },
+    getUnitData(key) {
+      return self.unitData.get(key);
+    },
+  }))
   .actions((self) => ({
     loadUnitFiles() {
       Object.entries(unitFiles)
@@ -32,6 +43,11 @@ const UnitFactory = types
       }
 
       const { type, ...unitArgs } = getSnapshot(unitLevelData);
+
+      if (!self.isValidKey(type)) {
+        console.error(`Tried to create unit with invalid key: "${type}"`);
+        return;
+      }
 
       return self.unitData.get(type).createUnit(unitArgs);
     },

@@ -1,9 +1,4 @@
-import {
-  getParent,
-  getParentOfType,
-  getSnapshot,
-  types,
-} from "mobx-state-tree";
+import { getParentOfType, getSnapshot, types } from "mobx-state-tree";
 import UnitLevelData from "./UnitLevelData";
 import { constructMatrixFromTemplate } from "functional-game-utils";
 import isInt from "../utils/isInt";
@@ -19,6 +14,7 @@ const LevelData = types
   .actions((self) => ({
     createGrid() {
       const units = [];
+      const deployLocations = [];
 
       const tiles = constructMatrixFromTemplate((char, location) => {
         let icon = char;
@@ -34,6 +30,12 @@ const LevelData = types
           icon = ".";
         }
 
+        if (char === "*") {
+          // This is a deploy location
+          deployLocations.push(location);
+          icon = ".";
+        }
+
         return {
           icon,
         };
@@ -41,6 +43,7 @@ const LevelData = types
 
       const grid = Grid.create({
         tiles,
+        deployLocations,
         units: [],
       });
 

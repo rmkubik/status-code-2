@@ -1,12 +1,11 @@
 import { constructMatrix } from "functional-game-utils";
-import { flow, getSnapshot, onSnapshot, types } from "mobx-state-tree";
+import { flow, onSnapshot, types } from "mobx-state-tree";
 import { createContext, useContext } from "react";
 import Grid from "./Grid";
 import Game from "./Game";
 import wait from "../utils/wait";
 import Inventory from "./Inventory";
 import UnitFactory from "./UnitFactory";
-import createGridFromLevel from "../utils/createGridFromLevel";
 import LevelLoader from "./LevelLoader";
 
 const RootModel = types
@@ -27,44 +26,11 @@ const RootModel = types
       self.scene = newScene;
     },
     startBattle(level) {
+      self.game.reset();
       self.grid = self.levelLoader.create(level);
 
       self.changeScene("battleIntro");
     },
-    endTurn: flow(function* endTurn() {
-      self.state = "enemyActing";
-
-      const enemyUnits = self.grid
-        .getUnitsByOwner(1)
-        .filter((unit) => !unit.isDead);
-
-      for (enemyUnit of enemyUnits) {
-        let isUnitMoving = true;
-
-        while (isUnitMoving) {
-          const moveTarget = enemyUnit.getMoveTarget();
-
-          if (moveTarget) {
-            enemyUnit.move(moveTarget);
-            yield wait(200);
-          } else {
-            const actionIndex = 0;
-            const actionTarget = enemyUnit.getActionTarget(actionIndex);
-
-            if (!actionTarget) {
-              break;
-            }
-
-            yield enemyUnit.takeAction(actionIndex, actionTarget);
-          }
-        }
-      }
-
-      self.game.advanceTurnCount();
-      self.game.setSelectedActionIndex(-1);
-      self.grid.resetUnitsForNewTurn();
-      self.state = "playerActing";
-    }),
   }));
 
 const initialTiles = constructMatrix(
@@ -87,7 +53,9 @@ let initialState = RootModel.create({
   game: {
     playerNumber: 0,
   },
-  inventory: {},
+  inventory: {
+    units: ["hack", "hack"],
+  },
   unitFactory: {},
   levelLoader: {},
   scene: "mainMenu",

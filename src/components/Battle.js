@@ -5,10 +5,11 @@ import BattleGrid from "./BattleGrid";
 import Tile from "./Tile";
 import UnitPanel from "./UnitPanel";
 import { observer } from "mobx-react-lite";
+import MyPrograms from "./MyPrograms";
 
 const Battle = observer(() => {
   const [selected, setSelected] = useState();
-  const { grid, game, endTurn, state, changeScene } = useRootStore();
+  const { grid, game, changeScene } = useRootStore();
 
   const { selectedActionIndex } = game;
   const selectedUnit = grid.getUnitAtLocation(selected);
@@ -38,23 +39,28 @@ const Battle = observer(() => {
               isSelected={isSelected}
               isActionTarget={isActionTarget}
               isMoveTarget={isMoveTarget}
+              isDeployLocation={
+                game.state === "deployment" && grid.isDeployLocation(location)
+              }
               onClick={() => {
-                if (isMoveTarget) {
-                  if (selectedUnit) {
-                    selectedUnit.move(location);
-                    setSelected(location);
+                if (game.state === "playerActing") {
+                  if (isMoveTarget) {
+                    if (selectedUnit) {
+                      selectedUnit.move(location);
+                      setSelected(location);
+                    }
+
+                    return;
                   }
 
-                  return;
-                }
+                  if (isActionTarget) {
+                    if (selectedUnit) {
+                      selectedUnit.takeAction(selectedActionIndex, location);
+                      game.setSelectedActionIndex(-1);
+                    }
 
-                if (isActionTarget) {
-                  if (selectedUnit) {
-                    selectedUnit.takeAction(selectedActionIndex, location);
-                    game.setSelectedActionIndex(-1);
+                    return;
                   }
-
-                  return;
                 }
 
                 if (isSelected) {
@@ -75,15 +81,18 @@ const Battle = observer(() => {
         style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
       >
         <p style={{ marginRight: "1rem" }}>Turn: {game.currentTurn + 1}</p>
-        <button
-          className={state === "enemyActing" ? "disabled" : ""}
-          onClick={endTurn}
-        >
+        <button disabled={game.state !== "playerActing"} onClick={game.endTurn}>
           End Turn
         </button>
         <button onClick={() => changeScene("map")}>Disconnect</button>
       </div>
       <UnitPanel unit={selectedUnit} />
+      {game.state === "deployment" && (
+        <>
+          <MyPrograms mode="deployment" selectedLocation={selected} />
+          <button onClick={game.finishDeployment}>Finish Deployment</button>
+        </>
+      )}
     </>
   );
 });

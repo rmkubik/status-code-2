@@ -7,13 +7,11 @@ import {
   constructArray,
   constructMatrixFromTemplate,
   getLocation,
-  initArray,
 } from "functional-game-utils";
 import Tile from "./Tile";
 import { observer } from "mobx-react-lite";
 import { Tile as TileModel } from "../models/Grid";
-import level1 from "../../data/levels/1.yaml";
-import isInt from "../utils/isInt";
+import MyPrograms from "./MyPrograms";
 
 const mapWithDots = map.replaceAll(" ", ".");
 let mapWithSpaces = "";
@@ -63,7 +61,7 @@ function isLevelIcon(icon) {
 
 const Map = observer(() => {
   const [selected, setSelected] = useState();
-  const { startBattle, levelLoader } = useRootStore();
+  const { startBattle, levelLoader, inventory, unitFactory } = useRootStore();
 
   const selectedTile = selected && getLocation(tiles, selected);
   let isValidLevelSelected = false;
@@ -106,6 +104,7 @@ const Map = observer(() => {
       >
         Connect
       </button>
+      <MyPrograms />
     </>
   );
 });
