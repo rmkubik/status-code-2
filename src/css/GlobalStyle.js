@@ -30,7 +30,7 @@ const GlobalStyle = createGlobalStyle`
       background-color: white;
     }
 
-    &.disabled {
+    &.disabled, &:disabled {
       opacity: 0.5;
     }
   }

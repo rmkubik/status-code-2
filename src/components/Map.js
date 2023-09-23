@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRootStore } from "../models/Root";
 import map from "bundle-text:../../data/map.txt";
 import Grid from "./Grid";
 import {
+  compareLocations,
   constructArray,
   constructMatrixFromTemplate,
+  getLocation,
   initArray,
 } from "functional-game-utils";
 import Tile from "./Tile";
@@ -55,8 +57,15 @@ function isBoxDrawingChar(char) {
   return charCode >= 0x2500 && charCode <= 0x257f;
 }
 
+function isLevelIcon(icon) {
+  return !isBoxDrawingChar(icon) && icon !== ".";
+}
+
 const Map = observer(() => {
+  const [selected, setSelected] = useState();
   const { startBattle } = useRootStore();
+
+  const selectedTile = selected && getLocation(tiles, selected);
 
   return (
     <ul>
@@ -66,17 +75,25 @@ const Map = observer(() => {
           <Tile
             key={`${location.row}.${location.col}`}
             isMapTile
+            isSelected={selected && compareLocations(location, selected)}
             tile={tile}
             onClick={() => {
-              if (!isBoxDrawingChar(tile.icon) && tile.icon !== ".") {
-                startBattle(tile.icon);
-              }
+              setSelected(location);
             }}
           />
         )}
       />
       <li>
-        <button onClick={() => changeScene("battleIntro")}>Start Battle</button>
+        <button
+          disabled={selectedTile ? !isLevelIcon(selectedTile.icon) : true}
+          onClick={() => {
+            if (isLevelIcon(selectedTile.icon)) {
+              startBattle(selectedTile.icon);
+            }
+          }}
+        >
+          Connect
+        </button>
       </li>
     </ul>
   );
