@@ -12,6 +12,7 @@ import { RootModel } from "./Root";
 
 const LevelData = types
   .model("LevelData", {
+    name: types.string,
     tiles: types.string,
     units: types.array(UnitLevelData),
   })

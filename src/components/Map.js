@@ -63,12 +63,20 @@ function isLevelIcon(icon) {
 
 const Map = observer(() => {
   const [selected, setSelected] = useState();
-  const { startBattle } = useRootStore();
+  const { startBattle, levelLoader } = useRootStore();
 
   const selectedTile = selected && getLocation(tiles, selected);
+  let isValidLevelSelected = false;
+
+  if (selectedTile) {
+    if (isLevelIcon(selectedTile.icon) && levelLoader.has(selectedTile.icon)) {
+      isValidLevelSelected = true;
+    }
+  }
 
   return (
-    <ul>
+    <>
+      <h1>The Cloud</h1>
       <Grid
         tiles={tiles}
         renderTile={(tile, location) => (
@@ -83,19 +91,22 @@ const Map = observer(() => {
           />
         )}
       />
-      <li>
-        <button
-          disabled={selectedTile ? !isLevelIcon(selectedTile.icon) : true}
-          onClick={() => {
-            if (isLevelIcon(selectedTile.icon)) {
-              startBattle(selectedTile.icon);
-            }
-          }}
-        >
-          Connect
-        </button>
-      </li>
-    </ul>
+      <p>
+        {selectedTile && levelLoader.has(selectedTile.icon)
+          ? levelLoader.getName(selectedTile.icon)
+          : "UNDEFINED"}
+      </p>
+      <button
+        disabled={!isValidLevelSelected}
+        onClick={() => {
+          if (isLevelIcon(selectedTile.icon)) {
+            startBattle(selectedTile.icon);
+          }
+        }}
+      >
+        Connect
+      </button>
+    </>
   );
 });
 

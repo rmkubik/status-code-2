@@ -20,6 +20,12 @@ const LevelLoader = types
           self.levelData.set(key, levelData);
         });
     },
+    has(key) {
+      return self.levelData.has(key);
+    },
+    getName(key) {
+      return self.levelData.get(key).name;
+    },
     create(key) {
       if (!self.levelData.get(key)) {
         console.error(`Failed to create level "${key}". Does not exist!`);
