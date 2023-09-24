@@ -9,7 +9,7 @@ import MyPrograms from "./MyPrograms";
 
 const Battle = observer(() => {
   const [selected, setSelected] = useState();
-  const { grid, game, changeScene } = useRootStore();
+  const { grid, game, endBattle } = useRootStore();
 
   const { selectedActionIndex } = game;
   const selectedUnit = grid.getUnitAtLocation(selected);
@@ -86,7 +86,7 @@ const Battle = observer(() => {
         <button disabled={game.state !== "playerActing"} onClick={game.endTurn}>
           End Turn
         </button>
-        <button onClick={() => changeScene("map")}>Disconnect</button>
+        <button onClick={endBattle}>Disconnect</button>
       </div>
       <UnitPanel unit={selectedUnit} location={selected} />
       {game.state === "deployment" && (

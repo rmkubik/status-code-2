@@ -10,7 +10,29 @@ const LevelData = types
     name: types.string,
     tiles: types.string,
     units: types.array(UnitLevelData),
+    intro: types.array(types.string),
   })
+  .views((self) => ({
+    getIntro() {
+      return self.intro.map((intro) => {
+        const { asciiArtLoader } = getParentOfType(self, RootModel);
+        const [code, value] = intro.split(":");
+
+        switch (code) {
+          case "ASCII":
+            return {
+              type: "asciiArt",
+              value: asciiArtLoader.get(value),
+            };
+          default:
+            return {
+              type: "text",
+              value: intro,
+            };
+        }
+      });
+    },
+  }))
   .actions((self) => ({
     createGrid() {
       const units = [];

@@ -13,12 +13,16 @@ const LevelLoader = types
     getName(key) {
       return self.levelData.get(key).name;
     },
+    getIntro(key) {
+      return self.levelData.get(key).getIntro();
+    },
   }))
   .actions((self) => ({
     loadLevelFiles() {
       Object.entries(levelFiles)
         .map(([key, levelFile]) => {
           try {
+            console.log({ levelFile });
             return [key, LevelData.create(levelFile)];
           } catch (error) {
             console.error(`Failed to parse level data for: ${key}`, error);

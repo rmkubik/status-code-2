@@ -1,4 +1,9 @@
-name: www.shield.tutorial.com
+name: banking.commercial-industrial.cn
+
+intro:
+  - ASCII:eagle
+  - This system is secured by Royal Eagle AV.
+  - Beware unathorized access.
 
 tiles: |
   . . . . . . . 

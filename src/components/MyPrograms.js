@@ -13,11 +13,11 @@ const MyPrograms = ({ mode = "view", selectedLocation }) => {
     <>
       <h2>My Programs</h2>
       <ul>
-        {inventory.units.map((unitKey) => {
+        {inventory.units.map((unitKey, index) => {
           const unit = unitFactory.getUnitData(unitKey);
 
           return (
-            <li>
+            <li key={unitKey + index}>
               {unit.headIcon} - {unit.name}{" "}
               {mode === "deployment" && (
                 <button

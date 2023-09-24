@@ -39,6 +39,10 @@ const GlobalStyle = createGlobalStyle`
 
   .animated {
     animation-fill-mode: both;
+
+    &.infinite {
+      animation-iteration-count: infinite;
+    }
   }
 `;
 

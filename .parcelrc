@@ -3,5 +3,11 @@
   "resolvers": [
     "@parcel/resolver-glob",
     "..."
-  ]
+  ],
+  "transformers": {
+    "*.txt": [
+      "...",
+      "@parcel/transformer-inline-string"
+    ]
+  }
 }

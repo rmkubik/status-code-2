@@ -7,6 +7,7 @@ import wait from "../utils/wait";
 import Inventory from "./Inventory";
 import UnitFactory from "./UnitFactory";
 import LevelLoader from "./LevelLoader";
+import AsciiArtLoader from "./AsciiArtLoader";
 
 const RootModel = types
   .model("Root", {
@@ -15,7 +16,9 @@ const RootModel = types
     game: Game,
     unitFactory: UnitFactory,
     levelLoader: LevelLoader,
+    asciiArtLoader: AsciiArtLoader,
     scene: types.enumeration(["mainMenu", "map", "battleIntro", "battle"]),
+    currentLevelKey: types.maybe(types.string),
   })
   .actions((self) => ({
     changeScene(newScene) {
@@ -24,8 +27,13 @@ const RootModel = types
     startBattle(level) {
       self.game.reset();
       self.grid = self.levelLoader.create(level);
+      self.currentLevelKey = level;
 
       self.changeScene("battleIntro");
+    },
+    endBattle() {
+      self.changeScene("map");
+      self.currentLevelKey = undefined;
     },
   }));
 
@@ -54,11 +62,13 @@ let initialState = RootModel.create({
   },
   unitFactory: {},
   levelLoader: {},
+  asciiArtLoader: {},
   scene: "mainMenu",
 });
 
 initialState.unitFactory.loadUnitFiles();
 initialState.levelLoader.loadLevelFiles();
+initialState.asciiArtLoader.loadFiles();
 
 // if (process.browser) {
 //   const data = localStorage.getItem("rootState");

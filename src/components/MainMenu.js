@@ -16,7 +16,10 @@ const MainMenu = () => {
   return (
     <>
       <pre>{statusCode}</pre>
-      <p>Click to start...</p>
+      <p>
+        Click to start...
+        <span className="cursorFlash animated infinite">|</span>
+      </p>
     </>
   );
 };
