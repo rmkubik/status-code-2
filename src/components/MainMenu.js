@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useRootStore } from "../models/Root";
-import statusCode from "bundle-text:../../data/asciiArt/statusCode.txt";
+import statusCode from "../../data/asciiArt/statusCode.txt";
+import Line from "./Line";
+import Sequence from "./Sequence";
 
 const MainMenu = () => {
   const { changeScene } = useRootStore();
@@ -15,11 +17,15 @@ const MainMenu = () => {
 
   return (
     <>
-      <pre>{statusCode}</pre>
-      <p>
-        Click to start...
-        <span className="cursorFlash animated infinite">|</span>
-      </p>
+      <Sequence>
+        <Line asciiArt alt="Status Code">
+          {statusCode}
+        </Line>
+        <Line inline>Click to start</Line>
+        <Line inline typed>
+          ^200.^400.^600.
+        </Line>
+      </Sequence>
     </>
   );
 };

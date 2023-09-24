@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import { useRootStore } from "../models/Root";
-import styled from "styled-components";
-
-const DelaySpan = styled.span`
-  opacity: 0;
-  animation-delay: ${(props) => props.delay}ms;
-`;
+import Line from "./Line";
+import Sequence from "./Sequence";
 
 const BattleIntro = () => {
   const { changeScene, currentLevelKey, levelLoader } = useRootStore();
@@ -23,20 +19,44 @@ const BattleIntro = () => {
 
   return (
     <>
-      <h1>Start Battle!</h1>
-      <p>Initiating connection attempt</p>
-      <p>
-        Target: {levelLoader.getName(currentLevelKey)}
-        <DelaySpan className="popIn animated" delay={200}>
-          .
-        </DelaySpan>
-        <DelaySpan className="popIn animated" delay={400}>
-          .
-        </DelaySpan>
-        <DelaySpan className="popIn animated" delay={600}>
-          .
-        </DelaySpan>
-      </p>
+      {/* <h1>Start Battle!</h1> */}
+      <Sequence flattenChildren>
+        <Line>Initiating connection attempt</Line>
+        <Line inline delay={200}>
+          {"Target: "}
+        </Line>
+        <Line typed inline delay={200}>
+          {levelLoader.getName(currentLevelKey)}
+        </Line>
+        <Line typed inline>
+          ^100.^500.^500.
+        </Line>
+        <Line />
+        {intro.map((introItem, index) => {
+          switch (introItem.type) {
+            default:
+            case "text":
+              return (
+                <Line delay={200} key={index}>
+                  {introItem.value}
+                </Line>
+              );
+            case "asciiArt":
+              return (
+                <Line delay={200} key={index} asciiArt alt={introItem.alt}>
+                  {introItem.value}
+                </Line>
+              );
+          }
+        })}
+        <Line />
+        <Line inline delay={600}>
+          Click to establish connection...
+        </Line>
+        <Line inline typed clearCursor={false} />
+      </Sequence>
+
+      {/* 
       {intro.map((introItem, index) => {
         switch (introItem.type) {
           case "text":
@@ -48,7 +68,7 @@ const BattleIntro = () => {
       <p>
         Click to establish connection...
         <span className="cursorFlash animated infinite">|</span>
-      </p>
+      </p> */}
     </>
   );
 };

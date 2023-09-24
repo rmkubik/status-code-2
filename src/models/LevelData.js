@@ -23,6 +23,7 @@ const LevelData = types
             return {
               type: "asciiArt",
               value: asciiArtLoader.get(value),
+              alt: `Text art of a ${value}`,
             };
           default:
             return {
