@@ -1,5 +1,10 @@
 name: 127.0.0.1
 
+intro:
+  - ASCII:home
+  - ""
+  - Home Sweet Home.
+
 tiles: |
   . . . . . . . . 2 .
   . . . . . . . . . .

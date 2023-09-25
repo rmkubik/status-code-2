@@ -6,7 +6,6 @@ import Sequence from "./Sequence";
 const BattleIntro = () => {
   const { changeScene, currentLevelKey, levelLoader } = useRootStore();
 
-  // console.log(levelLoader.getIntro(currentLevelKey));
   const intro = levelLoader.getIntro(currentLevelKey);
 
   useEffect(() => {
@@ -51,24 +50,12 @@ const BattleIntro = () => {
         })}
         <Line />
         <Line inline delay={600}>
-          Click to establish connection...
+          Click to establish connection
         </Line>
-        <Line inline typed clearCursor={false} />
+        <Line inline typed clearCursor={false}>
+          ^200...
+        </Line>
       </Sequence>
-
-      {/* 
-      {intro.map((introItem, index) => {
-        switch (introItem.type) {
-          case "text":
-            return <p key={index}>{introItem.value}</p>;
-          case "asciiArt":
-            return <pre key={index}>{introItem.value}</pre>;
-        }
-      })}
-      <p>
-        Click to establish connection...
-        <span className="cursorFlash animated infinite">|</span>
-      </p> */}
     </>
   );
 };

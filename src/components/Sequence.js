@@ -1,4 +1,30 @@
 import React from "react";
+import Line from "./Line";
+
+function preProcessChildren({ children, flattenChildren }) {
+  let processedChildren;
+
+  /**
+   * Children is not always type array. If it is an
+   * object or string then we surround it in an array.
+   */
+  if (Array.isArray(children)) {
+    // Make a copy of array so we don't modify a prop
+    processedChildren = [...children];
+  } else {
+    processedChildren = [children];
+  }
+
+  if (flattenChildren) {
+    processedChildren = processedChildren.flat();
+  }
+
+  processedChildren = processedChildren.filter((child) => {
+    return child.type === Line;
+  });
+
+  return processedChildren;
+}
 
 const Sequence = ({ children, flattenChildren }) => {
   const [currentChild, setCurrentChild] = React.useState(0);
@@ -8,16 +34,10 @@ const Sequence = ({ children, flattenChildren }) => {
     // document.body.scrollTop = document.body.scrollHeight;
   };
 
-  /**
-   * Children is not always type array. If it is an
-   * object or string then we surround it in an array.
-   */
-  const childrenForcedArray =
-    typeof children !== "array" ? [children] : children;
-
-  const preProcessedChildren = flattenChildren
-    ? childrenForcedArray.flat()
-    : childrenForcedArray;
+  const preProcessedChildren = preProcessChildren({
+    children,
+    flattenChildren,
+  });
 
   const currentChildren = preProcessedChildren.slice(0, currentChild + 1);
 

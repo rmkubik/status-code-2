@@ -82,10 +82,10 @@ const Line = ({
   });
 
   useEffect(() => {
-    if (!typed) {
+    if (!typed && !delayBlocked) {
       onFinished();
     }
-  }, [typed]);
+  }, [typed, delayBlocked]);
 
   if (delayBlocked) {
     return null;
