@@ -8,6 +8,7 @@ import Inventory from "./Inventory";
 import UnitFactory from "./UnitFactory";
 import LevelLoader from "./LevelLoader";
 import AsciiArtLoader from "./AsciiArtLoader";
+import SaveData from "./SaveData";
 
 const RootModel = types
   .model("Root", {
@@ -19,6 +20,7 @@ const RootModel = types
     asciiArtLoader: AsciiArtLoader,
     scene: types.enumeration(["mainMenu", "map", "battleIntro", "battle"]),
     currentLevelKey: types.maybe(types.string),
+    saveData: SaveData,
   })
   .actions((self) => ({
     changeScene(newScene) {
@@ -32,6 +34,10 @@ const RootModel = types
       self.changeScene("battleIntro");
     },
     endBattle() {
+      if (self.game.state === "victory") {
+        self.saveData.markCompleted(self.currentLevelKey);
+      }
+
       self.changeScene("map");
       self.currentLevelKey = undefined;
     },
@@ -64,6 +70,7 @@ let initialState = RootModel.create({
   levelLoader: {},
   asciiArtLoader: {},
   scene: "mainMenu",
+  saveData: {},
 });
 
 initialState.unitFactory.loadUnitFiles();

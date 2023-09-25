@@ -43,6 +43,7 @@ const TileContainer = styled.div`
   color: ${(props) => (props.isActionTarget ? "white" : "")};
   color: ${(props) => (props.isUnit ? "white" : "")};
   color: ${(props) => (props.isMapTile ? "white" : "")};
+  color: ${(props) => (props.isCompleted ? "green" : "")};
   background-color: ${getBgColor};
 
   font-size: ${(props) => props.theme.tileFontSize}px;
@@ -57,6 +58,7 @@ const Tile = observer(
     isActionTarget,
     isMapTile,
     isDeployLocation,
+    isCompleted,
     onClick,
   }) => {
     const { grid } = useRootStore();
@@ -113,6 +115,7 @@ const Tile = observer(
         isMoveTarget={isMoveTarget}
         isActionTarget={isActionTarget}
         isMapTile={isMapTile}
+        isCompleted={isCompleted}
         isDeployLocation={isDeployLocation}
         onClick={onClick}
         className={className}

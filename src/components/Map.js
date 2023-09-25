@@ -59,9 +59,11 @@ function isLevelIcon(icon) {
   return !isBoxDrawingChar(icon) && icon !== ".";
 }
 
+function getUnlockedLevels() {}
+
 const Map = observer(() => {
   const [selected, setSelected] = useState();
-  const { startBattle, levelLoader, inventory, unitFactory } = useRootStore();
+  const { startBattle, levelLoader, saveData } = useRootStore();
 
   const selectedTile = selected && getLocation(tiles, selected);
   let isValidLevelSelected = false;
@@ -82,6 +84,9 @@ const Map = observer(() => {
             key={`${location.row}.${location.col}`}
             isMapTile
             isSelected={selected && compareLocations(location, selected)}
+            isCompleted={
+              isLevelIcon(tile.icon) && saveData.isCompleted(tile.icon)
+            }
             tile={tile}
             onClick={() => {
               setSelected(location);
