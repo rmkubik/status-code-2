@@ -19,8 +19,10 @@ function preProcessChildren({ children, flattenChildren }) {
     processedChildren = processedChildren.flat();
   }
 
+  // Remove all children that
+  // are not a Line React component
   processedChildren = processedChildren.filter((child) => {
-    return child.type === Line;
+    return child?.type === Line;
   });
 
   return processedChildren;
@@ -41,9 +43,12 @@ const Sequence = ({ children, flattenChildren }) => {
 
   const currentChildren = preProcessedChildren.slice(0, currentChild + 1);
 
-  const boundChildren = React.Children.map(currentChildren, (child) => {
+  const boundChildren = currentChildren.map((child) => {
     return React.cloneElement(child, {
-      onFinished,
+      onFinished: () => {
+        child.props.onFinished?.();
+        onFinished();
+      },
     });
   });
 

@@ -44,6 +44,28 @@ const GlobalStyle = createGlobalStyle`
       animation-iteration-count: infinite;
     }
   }
+
+  .line {
+    .error {
+      color: red;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .warn {
+      color: yellow;
+    }
+
+    .normal {
+      color: white;
+    }
+
+    .info {
+      color: blue;
+    }
+  }
 `;
 
 export default GlobalStyle;
