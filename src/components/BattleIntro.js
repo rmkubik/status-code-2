@@ -1,19 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRootStore } from "../models/Root";
 import Line from "./Line";
 import Sequence from "./Sequence";
+import wait from "../utils/wait";
 
 const BattleIntro = () => {
   const { changeScene, currentLevelKey, levelLoader } = useRootStore();
+  const [shouldTypeStart, setShouldTypeStart] = useState(false);
 
   const intro = levelLoader.getIntro(currentLevelKey);
 
   useEffect(() => {
-    const changeToBattle = () => changeScene("battle");
+    const startGame = () => {
+      setShouldTypeStart(true);
+    };
 
-    document.addEventListener("click", changeToBattle);
+    document.addEventListener("click", startGame);
 
-    return () => document.removeEventListener("click", changeToBattle);
+    return () => document.removeEventListener("click", startGame);
   }, []);
 
   return (
@@ -55,6 +59,25 @@ const BattleIntro = () => {
         <Line inline typed clearCursor={false}>
           ^200...
         </Line>
+        <Line />
+        <Line bold inline>
+          ${" "}
+        </Line>
+        <Line inline typed clearCursor={!shouldTypeStart} />
+        {shouldTypeStart ? (
+          <Line
+            bold
+            inline
+            typed
+            clearCursor={false}
+            onFinished={async () => {
+              await wait(500);
+              changeScene("battle");
+            }}
+          >
+            {"connect #[success server]"}
+          </Line>
+        ) : null}
       </Sequence>
     </>
   );

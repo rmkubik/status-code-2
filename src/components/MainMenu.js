@@ -6,8 +6,8 @@ import Sequence from "./Sequence";
 import wait from "../utils/wait";
 
 const MainMenu = () => {
-  const [shouldTypeStart, setShouldTypeStart] = useState(false);
   const { changeScene } = useRootStore();
+  const [shouldTypeStart, setShouldTypeStart] = useState(false);
 
   useEffect(() => {
     const startGame = () => {
