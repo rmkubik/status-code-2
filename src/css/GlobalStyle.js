@@ -65,6 +65,10 @@ const GlobalStyle = createGlobalStyle`
     .info {
       color: blue;
     }
+
+    .bold {
+      font-weight: bold;
+    }
   }
 `;
 

@@ -3,7 +3,7 @@ name: banking.commercial-industrial.cn
 intro:
   - ASCII:eagle
   - ""
-  - This system is secured by Royal Eagle AV.
+  - This system is secured by $[error.bold Royal Eagle AV].
   - Unauthorized access is forbidden.
 
 tiles: |

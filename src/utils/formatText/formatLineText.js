@@ -11,7 +11,7 @@ const formatLineText = (text) => {
   let output = "";
 
   // Matches "#[symbol text text text]"
-  const regex = /#\[(.*?)\ (.*?)\]/g;
+  const regex = /\$\[(.*?)\ (.*?)\]/g;
 
   let prevIndex = 0;
 

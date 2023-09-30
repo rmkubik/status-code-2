@@ -1,6 +1,8 @@
 function getTagsByCode(code) {
+  const codes = code.split(".");
+
   return {
-    head: `<span class="${code}">`,
+    head: `<span class="${codes.join(" ")}">`,
     tail: `</span>`,
   };
 }

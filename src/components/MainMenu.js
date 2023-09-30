@@ -44,7 +44,7 @@ const MainMenu = () => {
               changeScene("map");
             }}
           >
-            {"init #[success game]"}
+            {"init $[success game]"}
           </Line>
         ) : null}
       </Sequence>

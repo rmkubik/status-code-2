@@ -25,7 +25,7 @@ const BattleIntro = () => {
       {/* <h1>Start Battle!</h1> */}
       <Sequence flattenChildren>
         <Line>Initiating connection attempt</Line>
-        <Line inline delay={200}>
+        <Line bold inline delay={200}>
           {"Target: "}
         </Line>
         <Line typed inline delay={200}>
@@ -56,13 +56,14 @@ const BattleIntro = () => {
         <Line inline delay={600}>
           Click to establish connection
         </Line>
-        <Line inline typed clearCursor={false}>
+        <Line inline typed>
           ^200...
         </Line>
         <Line />
         <Line bold inline>
           ${" "}
         </Line>
+        {/* TODO: This isn't really working... We want a blinking cursor here to wait for player to click (also on main menu) */}
         <Line inline typed clearCursor={!shouldTypeStart} />
         {shouldTypeStart ? (
           <Line
@@ -75,7 +76,7 @@ const BattleIntro = () => {
               changeScene("battle");
             }}
           >
-            {"connect #[success server]"}
+            {"connect $[success server]"}
           </Line>
         ) : null}
       </Sequence>

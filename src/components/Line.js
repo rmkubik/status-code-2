@@ -54,20 +54,31 @@ const useTyped = ({
   const containerRef = useRef();
   const typedRef = useRef();
 
+  const hideCursor = () => {
+    typedRef.current.showCursor = false;
+    containerRef.current.querySelector(".typed-cursor").style.display = "none";
+  };
+
   const onComplete = () => {
-    if (clearCursor) {
-      typedRef.current.showCursor = false;
-      containerRef.current.querySelector(".typed-cursor").style.display =
-        "none";
-    }
+    // if (clearCursor) {
+    //   hideCursor();
+    // }
 
     onFinished();
   };
 
   useEffect(() => {
+    if (clearCursor && typedRef.current?.typingComplete) {
+      hideCursor();
+    }
+  }, [clearCursor, typedRef.current?.typingComplete]);
+
+  useEffect(() => {
     if (!startTyping) {
       return;
     }
+
+    console.log({ text });
 
     typedRef.current = new Typed(lineRef.current, {
       strings: [text],
@@ -80,6 +91,41 @@ const useTyped = ({
   }, [startTyping]);
 
   return { containerRef, lineRef };
+};
+
+const processText = ({ typed, children }) => {
+  if (typed) {
+    return "";
+  }
+
+  if (typeof children === "string") {
+    // return formatLineText(children);
+    return;
+  }
+
+  return children;
+};
+
+const getTextString = ({ typed, children }) => {
+  if (typed) {
+    return;
+  }
+
+  if (typeof children !== "string") {
+    return;
+  }
+
+  return formatLineText(children);
+};
+
+const DangerouslySetSpan = ({ children }) => {
+  return (
+    <span
+      dangerouslySetInnerHTML={{
+        __html: formatLineText(children),
+      }}
+    />
+  );
 };
 
 const Line = ({
@@ -127,8 +173,10 @@ const Line = ({
         <pre ref={lineRef} role="img" aria-label={alt}>
           {typed ? "" : children}
         </pre>
+      ) : !typed && typeof children === "string" ? (
+        <DangerouslySetSpan>{children}</DangerouslySetSpan>
       ) : (
-        <span ref={lineRef}>{typed ? "" : children}</span>
+        <span ref={lineRef}>{processText({ children, typed })}</span>
       )}
     </LineContainer>
   );
