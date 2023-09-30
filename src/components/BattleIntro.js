@@ -63,8 +63,7 @@ const BattleIntro = () => {
         <Line bold inline>
           ${" "}
         </Line>
-        {/* TODO: This isn't really working... We want a blinking cursor here to wait for player to click (also on main menu) */}
-        <Line inline typed clearCursor={!shouldTypeStart} />
+        <Line inline typed clearCursor={shouldTypeStart} />
         {shouldTypeStart ? (
           <Line
             bold

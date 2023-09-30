@@ -78,8 +78,6 @@ const useTyped = ({
       return;
     }
 
-    console.log({ text });
-
     typedRef.current = new Typed(lineRef.current, {
       strings: [text],
       typeSpeed: 40,

@@ -32,7 +32,7 @@ const MainMenu = () => {
         <Line bold inline>
           ${" "}
         </Line>
-        <Line inline typed clearCursor={!shouldTypeStart} />
+        <Line inline typed clearCursor={shouldTypeStart} />
         {shouldTypeStart ? (
           <Line
             bold
