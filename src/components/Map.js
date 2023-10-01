@@ -15,6 +15,7 @@ import Tile from "./Tile";
 import { observer } from "mobx-react-lite";
 import { Tile as TileModel } from "../models/Grid";
 import MyPrograms from "./MyPrograms";
+import styled from "styled-components";
 
 const mapWithDots = map.replaceAll(" ", ".");
 let mapWithSpaces = "";
@@ -89,6 +90,26 @@ function getUnlockedLocations({ startLocation, tiles, saveData }) {
   );
 }
 
+const MapContainer = styled.div`
+  display: grid;
+  grid-template-columns: max-content max-content;
+`;
+
+const RightPanelContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  *:not(:last-child) {
+    margin-right: 1rem;
+  }
+`;
+
 const Map = observer(() => {
   const [selected, setSelected] = useState();
   const { startBattle, levelLoader, saveData } = useRootStore();
@@ -111,48 +132,57 @@ const Map = observer(() => {
   }
 
   return (
-    <>
-      <h1>The Cloud</h1>
-      <Grid
-        tiles={tiles}
-        renderTile={(tile, location) => (
-          <Tile
-            key={`${location.row}.${location.col}`}
-            isMapTile
-            isSelected={selected && compareLocations(location, selected)}
-            isCompleted={
-              isLevelIcon(tile.icon) && saveData.isCompleted(tile.icon)
-            }
-            tile={
-              unlockedLocations.some((unlockedLocation) =>
-                compareLocations(unlockedLocation, location)
-              )
-                ? tile
-                : { icon: "" }
-            }
-            onClick={() => {
-              setSelected(location);
-            }}
-          />
-        )}
-      />
-      <p>
-        {selectedTile && levelLoader.has(selectedTile.icon)
-          ? levelLoader.getName(selectedTile.icon)
-          : "UNDEFINED"}
-      </p>
-      <button
-        disabled={!isValidLevelSelected}
-        onClick={() => {
-          if (isLevelIcon(selectedTile.icon)) {
-            startBattle(selectedTile.icon);
-          }
-        }}
-      >
-        Connect
-      </button>
-      <MyPrograms />
-    </>
+    <MapContainer>
+      <div>
+        <h1>The Cloud</h1>
+        <Grid
+          tiles={tiles}
+          renderTile={(tile, location) => (
+            <Tile
+              key={`${location.row}.${location.col}`}
+              isMapTile
+              isSelected={selected && compareLocations(location, selected)}
+              isCompleted={
+                isLevelIcon(tile.icon) && saveData.isCompleted(tile.icon)
+              }
+              tile={
+                unlockedLocations.some((unlockedLocation) =>
+                  compareLocations(unlockedLocation, location)
+                )
+                  ? tile
+                  : { icon: "" }
+              }
+              onClick={() => {
+                setSelected(location);
+              }}
+            />
+          )}
+        />
+      </div>
+      <RightPanelContainer>
+        <div>
+          <h2>Server Info</h2>
+          <Row>
+            <p>
+              {selectedTile && levelLoader.has(selectedTile.icon)
+                ? levelLoader.getName(selectedTile.icon)
+                : "UNDEFINED"}
+            </p>
+            <button
+              disabled={!isValidLevelSelected}
+              onClick={() => {
+                if (isLevelIcon(selectedTile.icon)) {
+                  startBattle(selectedTile.icon);
+                }
+              }}
+            >
+              Connect
+            </button>
+          </Row>
+        </div>
+        <MyPrograms />
+      </RightPanelContainer>
+    </MapContainer>
   );
 });
 
