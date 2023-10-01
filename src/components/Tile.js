@@ -28,15 +28,27 @@ const getBgColor = (props) => {
 };
 
 const TileContainer = styled.div`
-  border: 1px solid transparent;
+  box-sizing: border-box;
 
-  border-top-color: ${(props) => (props.borders.up ? "transparent" : "black")};
-  border-bottom-color: ${(props) =>
-    props.borders.down ? "transparent" : "black"};
-  border-left-color: ${(props) =>
-    props.borders.left ? "transparent" : "black"};
-  border-right-color: ${(props) =>
-    props.borders.right ? "transparent" : "black"};
+  border: 2px solid transparent;
+
+  border-color: black;
+  border-top: ${(props) =>
+    props.borders.up && !props.isSelected ? "none" : ""};
+  padding-top: ${(props) =>
+    props.borders.up && !props.isSelected ? "2px" : ""};
+  border-bottom: ${(props) =>
+    props.borders.down && !props.isSelected ? "none" : ""};
+  padding-bottom: ${(props) =>
+    props.borders.down && !props.isSelected ? "2px" : ""};
+  border-left: ${(props) =>
+    props.borders.left && !props.isSelected ? "none" : ""};
+  padding-left: ${(props) =>
+    props.borders.left && !props.isSelected ? "2px" : ""};
+  border-right: ${(props) =>
+    props.borders.right && !props.isSelected ? "none" : ""};
+  padding-right: ${(props) =>
+    props.borders.right && !props.isSelected ? "2px" : ""};
 
   border-color: ${(props) => (props.isUnit ? "" : "transparent")};
 
