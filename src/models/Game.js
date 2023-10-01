@@ -1,7 +1,38 @@
-import { flow, getParentOfType, types } from "mobx-state-tree";
+import {
+  detach,
+  flow,
+  getParentOfType,
+  getSnapshot,
+  types,
+} from "mobx-state-tree";
 import Grid from "./Grid";
 import { RootModel } from "./Root";
 import wait from "../utils/wait";
+
+// TODO:
+// We need to track a bit more information
+// to entirely undo an action safely.
+//
+// All random actions, aka enemy choices
+// need to be deterministic.
+//
+// Persist RNG seed across undos?
+//
+// Reset any non-grid turn data as well.
+// Like turn count and gameState.
+const EndTurn = types.model({
+  type: types.literal("endTurn"),
+  preActionGridSnapshot: types.frozen(Grid),
+});
+const TakeUnitMove = types.model({
+  type: types.literal("takeUnitMove"),
+  preActionGridSnapshot: types.frozen(Grid),
+});
+const TakeUnitAction = types.model({
+  type: types.literal("takeUnitAction"),
+  preActionGridSnapshot: types.frozen(Grid),
+});
+const PlayerAction = types.union({}, EndTurn, TakeUnitMove, TakeUnitAction);
 
 const Game = types
   .model("Game", {
@@ -18,6 +49,7 @@ const Game = types
       ]),
       "deployment"
     ),
+    actions: types.optional(types.array(PlayerAction), []),
   })
   .actions((self) => ({
     advanceTurnCount() {
@@ -57,7 +89,32 @@ const Game = types
     finishDeployment() {
       self.state = "playerActing";
     },
+    trackPlayerAction({ type }) {
+      const { grid } = getParentOfType(self, RootModel);
+      const action = PlayerAction.create({
+        type,
+        preActionGridSnapshot: getSnapshot(grid),
+      });
+
+      self.actions.push(action);
+    },
+    undoPlayerAction() {
+      const root = getParentOfType(self, RootModel);
+
+      // We do this instead of using .pop() because
+      // mobx-state-tree doesn't like us using a node
+      // after removing it from the tree if we don't
+      // use the detatch function.
+      const lastAction = self.actions[self.actions.length - 1];
+      const action = detach(lastAction);
+
+      if (action) {
+        root.replaceGrid(action.preActionGridSnapshot);
+      }
+    },
     endTurn: flow(function* endTurn() {
+      self.trackPlayerAction({ type: "endTurn" });
+
       const { grid } = getParentOfType(self, RootModel);
 
       self.state = "enemyActing";

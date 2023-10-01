@@ -72,10 +72,6 @@ function getUnlockedLocations({ startLocation, tiles, saveData }) {
       return getCrossDirections();
     }),
     (tile, location) => {
-      // if (compareLocations(location, startLocation)) {
-      //   return true;
-      // }
-
       if (isLevelIcon(tile.icon)) {
         return true;
       }

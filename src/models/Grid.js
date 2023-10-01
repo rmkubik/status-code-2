@@ -39,6 +39,7 @@ const Grid = types
     tiles: Tiles,
     units: types.optional(types.array(Unit), []),
     deployLocations: types.array(Location),
+    selectedLocation: types.maybe(Location),
   })
   .views((self) => ({
     getUnitAtLocation(location) {
@@ -87,6 +88,16 @@ const Grid = types
         compareLocations(location, deployLocation)
       );
     },
+    get selectedUnit() {
+      return self.getUnitAtLocation(self.selectedLocation);
+    },
+    isSelectedLocation(location) {
+      if (!self.selectedLocation) {
+        return false;
+      }
+
+      return compareLocations(self.selectedLocation, location);
+    },
   }))
   .actions((self) => ({
     resetUnitsForNewTurn() {
@@ -101,6 +112,12 @@ const Grid = types
       const newUnit = unitFactory.create({ location, owner, type, otherParts });
 
       self.units.push(newUnit);
+    },
+    selectLocation(location) {
+      self.selectedLocation = location;
+    },
+    deSelectLocation() {
+      self.selectedLocation = undefined;
     },
   }));
 

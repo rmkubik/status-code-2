@@ -8,23 +8,21 @@ import { observer } from "mobx-react-lite";
 import MyPrograms from "./MyPrograms";
 
 const Battle = observer(() => {
-  const [selected, setSelected] = useState();
   const { grid, game, endBattle } = useRootStore();
-
-  const { selectedActionIndex } = game;
-  const selectedUnit = grid.getUnitAtLocation(selected);
+  const { selectedLocation, selectedUnit } = grid;
+  const { selectedActionIndex, undoPlayerAction } = game;
 
   return (
     <>
       <BattleGrid
         renderTile={(tile, location) => {
-          const isSelected = selected && compareLocations(selected, location);
+          const isSelected = grid.isSelectedLocation(location);
           const isUnitSelected = Boolean(selectedUnit);
 
           const isMoveTarget =
             isUnitSelected &&
             selectedUnit.isPlayerOwned() &&
-            selectedUnit.isHeadLocation(selected) &&
+            selectedUnit.isHeadLocation(selectedLocation) &&
             selectedUnit.canUnitMoveToLocation(grid, location);
 
           const isActionTarget =
@@ -46,8 +44,9 @@ const Battle = observer(() => {
                 if (game.state === "playerActing") {
                   if (isMoveTarget) {
                     if (selectedUnit) {
+                      game.trackPlayerAction({ type: "takeUnitMove" });
                       selectedUnit.move(location);
-                      setSelected(location);
+                      grid.selectLocation(location);
                     }
 
                     return;
@@ -55,6 +54,7 @@ const Battle = observer(() => {
 
                   if (isActionTarget) {
                     if (selectedUnit) {
+                      game.trackPlayerAction({ type: "takeUnitAction" });
                       selectedUnit.takeAction(selectedActionIndex, location);
                       game.setSelectedActionIndex(-1);
                     }
@@ -64,14 +64,14 @@ const Battle = observer(() => {
                 }
 
                 if (isSelected) {
-                  setSelected();
+                  grid.deSelectLocation();
                   game.setSelectedActionIndex(-1);
 
                   return;
                 }
 
                 game.setSelectedActionIndex(-1);
-                setSelected(location);
+                grid.selectLocation(location);
               }}
             />
           );
@@ -83,15 +83,22 @@ const Battle = observer(() => {
         {game.state === "victory" && <p>Victory!</p>}
         {game.state === "defeat" && <p>Defeat!</p>}
         <p style={{ marginRight: "1rem" }}>Turn: {game.currentTurn + 1}</p>
-        <button disabled={game.state !== "playerActing"} onClick={game.endTurn}>
+        <button
+          style={{ marginRight: "1rem" }}
+          disabled={game.state !== "playerActing"}
+          onClick={game.endTurn}
+        >
           End Turn
+        </button>
+        <button onClick={undoPlayerAction} style={{ marginRight: "1rem" }}>
+          Undo
         </button>
         <button onClick={endBattle}>Disconnect</button>
       </div>
-      <UnitPanel unit={selectedUnit} location={selected} />
+      <UnitPanel unit={selectedUnit} location={selectedLocation} />
       {game.state === "deployment" && (
         <>
-          <MyPrograms mode="deployment" selectedLocation={selected} />
+          <MyPrograms mode="deployment" selectedLocation={selectedLocation} />
           <button onClick={game.finishDeployment}>Finish Deployment</button>
         </>
       )}

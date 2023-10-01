@@ -41,6 +41,9 @@ const RootModel = types
       self.changeScene("map");
       self.currentLevelKey = undefined;
     },
+    replaceGrid(snapshot) {
+      self.grid = Grid.create(snapshot);
+    },
   }));
 
 const initialTiles = constructMatrix(
