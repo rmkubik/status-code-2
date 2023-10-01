@@ -47,23 +47,23 @@ const GlobalStyle = createGlobalStyle`
 
   .line {
     .error {
-      color: red;
+      color: ${(props) => props.theme.colors.error};
     }
 
     .success {
-      color: green;
+      color: ${(props) => props.theme.colors.success};
     }
 
     .warn {
-      color: yellow;
+      color: ${(props) => props.theme.colors.warn};
     }
 
     .normal {
-      color: white;
+      color: "inherit";
     }
 
     .info {
-      color: blue;
+      color: ${(props) => props.theme.colors.info};
     }
 
     .bold {

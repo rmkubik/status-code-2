@@ -3,6 +3,10 @@ import React from "react";
 import styled from "styled-components";
 import { useRootStore } from "../models/Root";
 import { observer } from "mobx-react-lite";
+import Sprite from "./Sprite";
+import tiles from "../../data/art/tiles.png";
+import woodAxe from "../../data/art/wood-axe.svg";
+import checkedShield from "../../data/art/checked-shield.svg";
 
 const getBgColor = (props) => {
   if (!props.isUnit) {
@@ -47,6 +51,19 @@ const TileContainer = styled.div`
   background-color: ${getBgColor};
 
   font-size: ${(props) => props.theme.tileFontSize}px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  /* padding: 3px; */
+
+  canvas {
+    image-rendering: pixelated;
+    height: ${(props) => props.theme.tileSpriteHeight}px;
+    width: ${(props) => props.theme.tileSpriteWidth}px;
+  }
 `;
 
 const Tile = observer(
@@ -76,8 +93,17 @@ const Tile = observer(
     let className = "";
 
     if (unitOnTile) {
+      // TODO:
+      // <Sprite src={tiles} color="error" />
+
       if (isHead) {
-        tileIcon = unitOnTile.headIcon;
+        tileIcon = <Sprite src={tiles} location={unitOnTile.headSprite} />;
+        // tileIcon =
+        //   unitOnTile.headIcon === "@" ? (
+        //     <img src={woodAxe} />
+        //   ) : (
+        //     <img src={checkedShield} />
+        //   );
       } else {
         tileIcon = "";
       }

@@ -8,17 +8,14 @@ import formatLineText from "../utils/formatText/formatLineText";
  * the onces in GlobalStyle for .line
  */
 const getColor = (props) => {
-  switch (props.color) {
-    case "warn":
-      return "yellow";
-    case "error":
-      return "red";
-    case "success":
-      return "green";
-    case "normal":
-    default:
-      return "";
+  const { colors } = props.theme;
+  const themeColor = colors[props.color];
+
+  if (!themeColor) {
+    return "";
   }
+
+  return themeColor;
 };
 
 const LineContainer = styled.div`

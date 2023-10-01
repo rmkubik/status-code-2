@@ -4,6 +4,8 @@ import statusCode from "../../data/asciiArt/statusCode.txt";
 import Line from "./Line";
 import Sequence from "./Sequence";
 import wait from "../utils/wait";
+import Sprite from "./Sprite";
+import tiles from "../../data/art/tiles.png";
 
 const MainMenu = () => {
   const { changeScene } = useRootStore();

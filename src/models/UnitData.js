@@ -2,11 +2,12 @@ import { getParent, getSnapshot, types } from "mobx-state-tree";
 import Unit from "./Unit";
 import Action from "./Action";
 import EnemyBrain from "./EnemyBrain";
+import Location from "./Location";
 
 const UnitData = types
   .model("UnitData", {
     headIcon: types.string,
-    tailIcon: types.string,
+    headSprite: Location,
     maxLength: types.number,
     name: types.string,
     moves: types.model({

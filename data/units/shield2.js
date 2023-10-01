@@ -1,6 +1,9 @@
 export default {
   headIcon: "▯",
-  tailIcon: "#",
+  headSprite: {
+    row: 0,
+    col: 7,
+  },
   maxLength: 4,
   name: "Shield+",
   moves: {

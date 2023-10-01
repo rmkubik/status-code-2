@@ -11,8 +11,8 @@ import UnitAnimations from "./UnitAnimations";
 
 const Unit = types
   .model("Unit", {
-    tailIcon: types.string,
     headIcon: types.string,
+    headSprite: Location,
     parts: types.array(Location),
     maxLength: types.number,
     name: types.string,
