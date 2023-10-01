@@ -11,6 +11,7 @@ const LevelData = types
     tiles: types.string,
     units: types.array(UnitLevelData),
     intro: types.array(types.string),
+    mapIcon: types.maybe(types.string),
   })
   .views((self) => ({
     getIntro() {
@@ -32,6 +33,32 @@ const LevelData = types
             };
         }
       });
+    },
+    parseMapIconLocation() {
+      const undefinedIcon = {
+        row: 6,
+        col: 2,
+      };
+      if (!self.mapIcon) {
+        return undefinedIcon;
+      }
+
+      const [rowString, colString] = self.mapIcon.split(",");
+      const row = parseInt(rowString, 10);
+      const col = parseInt(colString, 10);
+
+      if (Number.isNaN(row)) {
+        return undefinedIcon;
+      }
+
+      if (Number.isNaN(col)) {
+        return undefinedIcon;
+      }
+
+      return {
+        row,
+        col,
+      };
     },
   }))
   .actions((self) => ({

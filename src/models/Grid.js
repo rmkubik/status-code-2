@@ -4,7 +4,12 @@ import {
   getNeighbors,
   isLocationInBounds,
 } from "functional-game-utils";
-import { getParentOfType, types } from "mobx-state-tree";
+import {
+  getParentOfType,
+  getSnapshot,
+  isStateTreeNode,
+  types,
+} from "mobx-state-tree";
 import Unit from "./Unit";
 import isTruthy from "../utils/isTruthy";
 import { RootModel } from "./Root";
@@ -114,7 +119,14 @@ const Grid = types
       self.units.push(newUnit);
     },
     selectLocation(location) {
-      self.selectedLocation = location;
+      let newLocation = location;
+
+      if (isStateTreeNode(newLocation)) {
+        const snapshot = getSnapshot(newLocation);
+        newLocation = Location.create(snapshot);
+      }
+
+      self.selectedLocation = newLocation;
     },
     deSelectLocation() {
       self.selectedLocation = undefined;

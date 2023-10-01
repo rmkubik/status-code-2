@@ -1,4 +1,4 @@
-import { getSnapshot, types } from "mobx-state-tree";
+import { getSnapshot, isStateTreeNode, types } from "mobx-state-tree";
 import UnitData from "./UnitData";
 import unitFiles from "../../data/units/*.js";
 import UnitLevelData from "./UnitLevelData";
@@ -34,6 +34,10 @@ const UnitFactory = types
     },
     create(unitLevelDataRaw) {
       let unitLevelData;
+
+      if (isStateTreeNode(unitLevelDataRaw.location)) {
+        unitLevelDataRaw.location = getSnapshot(unitLevelDataRaw.location);
+      }
 
       try {
         unitLevelData = UnitLevelData.create(unitLevelDataRaw);

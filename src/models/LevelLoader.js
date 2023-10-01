@@ -16,6 +16,9 @@ const LevelLoader = types
     getIntro(key) {
       return self.levelData.get(key).getIntro();
     },
+    getMapIcon(key) {
+      return self.levelData.get(key).parseMapIconLocation();
+    },
   }))
   .actions((self) => ({
     loadLevelFiles() {

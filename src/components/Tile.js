@@ -8,6 +8,17 @@ import tiles from "../../data/art/tiles.png";
 import woodAxe from "../../data/art/wood-axe.svg";
 import checkedShield from "../../data/art/checked-shield.svg";
 
+// https://www.compart.com/en/unicode/block/U+2500
+function isBoxDrawingChar(char) {
+  const charCode = char.charCodeAt(0);
+
+  return charCode >= 0x2500 && charCode <= 0x257f;
+}
+
+function isLevelIcon(icon) {
+  return !isBoxDrawingChar(icon) && icon !== "." && icon !== "";
+}
+
 const getBgColor = (props) => {
   if (!props.isUnit) {
     if (props.isDeployLocation) {
@@ -92,7 +103,7 @@ const Tile = observer(
     isCompleted,
     onClick,
   }) => {
-    const { grid } = useRootStore();
+    const { grid, levelLoader } = useRootStore();
 
     const unitOnTile = grid.getUnitAtLocation(location);
     const isHead = unitOnTile && compareLocations(unitOnTile.head, location);
@@ -143,6 +154,10 @@ const Tile = observer(
     if (isMapTile) {
       if (tileIcon === ".") {
         tileIcon = "";
+      } else if (isLevelIcon(tileIcon)) {
+        tileIcon = (
+          <Sprite src={tiles} location={levelLoader.getMapIcon(tileIcon)} />
+        );
       }
     }
 

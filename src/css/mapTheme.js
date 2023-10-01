@@ -1,6 +1,6 @@
 const mapTheme = {
-  tileSize: 34,
-  tileFontSize: 28,
+  // tileSize: 34,
+  // tileFontSize: 28,
 };
 
 export default mapTheme;
