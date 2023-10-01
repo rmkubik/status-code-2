@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRootStore } from "../models/Root";
 import map from "bundle-text:../../data/map.txt";
 import Grid from "./Grid";
@@ -6,7 +6,10 @@ import {
   compareLocations,
   constructArray,
   constructMatrixFromTemplate,
+  floodFill,
+  getCrossDirections,
   getLocation,
+  getNeighbors,
 } from "functional-game-utils";
 import Tile from "./Tile";
 import { observer } from "mobx-react-lite";
@@ -59,7 +62,36 @@ function isLevelIcon(icon) {
   return !isBoxDrawingChar(icon) && icon !== ".";
 }
 
-function getUnlockedLevels() {}
+function getUnlockedLocations({ startLocation, tiles, saveData }) {
+  return floodFill(
+    getNeighbors((tile) => {
+      if (isLevelIcon(tile.icon) && !saveData.isCompleted(tile.icon)) {
+        return [];
+      }
+
+      return getCrossDirections();
+    }),
+    (tile, location) => {
+      // if (compareLocations(location, startLocation)) {
+      //   return true;
+      // }
+
+      if (isLevelIcon(tile.icon)) {
+        return true;
+      }
+
+      if (isBoxDrawingChar(tile.icon)) {
+        return true;
+      }
+
+      return false;
+    },
+    tiles,
+    [startLocation],
+    [],
+    []
+  );
+}
 
 const Map = observer(() => {
   const [selected, setSelected] = useState();
@@ -67,6 +99,14 @@ const Map = observer(() => {
 
   const selectedTile = selected && getLocation(tiles, selected);
   let isValidLevelSelected = false;
+
+  const unlockedLocations = useMemo(() => {
+    return getUnlockedLocations({
+      startLocation: { row: 2, col: 0 },
+      tiles,
+      saveData,
+    });
+  }, [saveData, tiles]);
 
   if (selectedTile) {
     if (isLevelIcon(selectedTile.icon) && levelLoader.has(selectedTile.icon)) {
@@ -87,7 +127,13 @@ const Map = observer(() => {
             isCompleted={
               isLevelIcon(tile.icon) && saveData.isCompleted(tile.icon)
             }
-            tile={tile}
+            tile={
+              unlockedLocations.some((unlockedLocation) =>
+                compareLocations(unlockedLocation, location)
+              )
+                ? tile
+                : { icon: "" }
+            }
             onClick={() => {
               setSelected(location);
             }}

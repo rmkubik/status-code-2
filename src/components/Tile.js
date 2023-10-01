@@ -51,6 +51,8 @@ const TileContainer = styled.div`
   background-color: ${getBgColor};
 
   font-size: ${(props) => props.theme.tileFontSize}px;
+  height: ${(props) => props.theme.tileSize}px;
+  width: ${(props) => props.theme.tileSize}px;
 
   display: flex;
   flex-direction: column;
