@@ -12,6 +12,7 @@ const LevelData = types
     units: types.array(UnitLevelData),
     intro: types.array(types.string),
     mapIcon: types.maybe(types.string),
+    whois: types.string,
   })
   .views((self) => ({
     getIntro() {
@@ -39,6 +40,7 @@ const LevelData = types
         row: 6,
         col: 2,
       };
+
       if (!self.mapIcon) {
         return undefinedIcon;
       }

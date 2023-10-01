@@ -11,13 +11,39 @@ const LevelLoader = types
       return self.levelData.has(key);
     },
     getName(key) {
+      if (!self.has(key)) {
+        console.warn(`Failed to getName for: ${key}`);
+        return "";
+      }
+
       return self.levelData.get(key).name;
     },
     getIntro(key) {
+      if (!self.has(key)) {
+        console.warn(`Failed to getIntro for: ${key}`);
+        return [];
+      }
+
       return self.levelData.get(key).getIntro();
     },
     getMapIcon(key) {
+      if (!self.has(key)) {
+        console.warn(`Failed to getMapIcon for: ${key}`);
+        return {
+          row: 6,
+          col: 2,
+        };
+      }
+
       return self.levelData.get(key).parseMapIconLocation();
+    },
+    getWhois(key) {
+      if (!self.has(key)) {
+        console.warn(`Failed to getWhois for: ${key}`);
+        return "";
+      }
+
+      return self.levelData.get(key).whois;
     },
   }))
   .actions((self) => ({
@@ -25,7 +51,6 @@ const LevelLoader = types
       Object.entries(levelFiles)
         .map(([key, levelFile]) => {
           try {
-            console.log({ levelFile });
             return [key, LevelData.create(levelFile)];
           } catch (error) {
             console.error(`Failed to parse level data for: ${key}`, error);

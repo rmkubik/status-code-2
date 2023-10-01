@@ -21,6 +21,7 @@ const RootModel = types
     scene: types.enumeration(["mainMenu", "map", "battleIntro", "battle"]),
     currentLevelKey: types.maybe(types.string),
     saveData: SaveData,
+    dev: types.optional(types.boolean, false),
   })
   .actions((self) => ({
     changeScene(newScene) {
@@ -74,6 +75,9 @@ let initialState = RootModel.create({
   asciiArtLoader: {},
   scene: "mainMenu",
   saveData: {},
+  // TODO:
+  // Remove this
+  dev: process.env.NODE_ENV === "development",
 });
 
 initialState.unitFactory.loadUnitFiles();

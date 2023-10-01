@@ -9,6 +9,7 @@ import MainMenu from "./MainMenu";
 import { observer } from "mobx-react-lite";
 import Map from "./Map";
 import mapTheme from "../css/mapTheme";
+import DevPanel from "./DevPanel";
 
 const App = observer(() => {
   const { scene } = useRootStore();
@@ -32,6 +33,19 @@ const App = observer(() => {
   }
 });
 
+const withDevPanel = (WrappedComponent) => {
+  return () => {
+    const { dev } = useRootStore();
+
+    return (
+      <>
+        <WrappedComponent />
+        {dev && <DevPanel />}
+      </>
+    );
+  };
+};
+
 const withProviders = (WrappedComponent) => {
   return () => {
     return (
@@ -45,4 +59,4 @@ const withProviders = (WrappedComponent) => {
   };
 };
 
-export default withProviders(App);
+export default withProviders(withDevPanel(App));

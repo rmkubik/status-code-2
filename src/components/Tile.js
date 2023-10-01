@@ -70,7 +70,7 @@ const TileContainer = styled.div`
   color: ${(props) => (props.isActionTarget ? "white" : "")};
   color: ${(props) => (props.isUnit ? "white" : "")};
   color: ${(props) => (props.isMapTile ? "white" : "")};
-  color: ${(props) => (props.isCompleted ? "green" : "")};
+  color: ${(props) => (props.isCompleted ? props.theme.colors.success : "")};
   background-color: ${getBgColor};
 
   font-size: ${(props) => props.theme.tileFontSize}px;
@@ -156,7 +156,11 @@ const Tile = observer(
         tileIcon = "";
       } else if (isLevelIcon(tileIcon)) {
         tileIcon = (
-          <Sprite src={tiles} location={levelLoader.getMapIcon(tileIcon)} />
+          <Sprite
+            src={tiles}
+            location={levelLoader.getMapIcon(tileIcon)}
+            color={isCompleted ? "success" : ""}
+          />
         );
       }
     }

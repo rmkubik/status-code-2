@@ -1,5 +1,6 @@
 name: banking.commercial-industrial.cn
-
+whois: Commercial & Industrial Bank of China
+mapIcon: 3,4
 intro:
   - ASCII:eagle
   - ""
