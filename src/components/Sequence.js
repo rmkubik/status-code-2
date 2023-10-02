@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Line from "./Line";
 import arrayifyChildren from "../utils/react/arrayifyChildren";
 
@@ -18,10 +18,26 @@ function preProcessChildren({ children, flattenChildren }) {
   return processedChildren;
 }
 
-const Sequence = ({ children, flattenChildren }) => {
+const Sequence = ({ children, flattenChildren, onFinished = () => {} }) => {
   const [currentChild, setCurrentChild] = React.useState(0);
 
-  const onFinished = () => {
+  useEffect(() => {
+    if (currentChild >= children.length - 1) {
+      onFinished();
+    }
+  }, [currentChild, children.length]);
+
+  useEffect(() => {
+    const skipSequence = () => {
+      setCurrentChild(children.length);
+    };
+
+    document.addEventListener("click", skipSequence);
+
+    return () => document.removeEventListener("click", skipSequence);
+  }, [children.length]);
+
+  const onLineFinished = () => {
     setCurrentChild((prevCurrentChild) => prevCurrentChild + 1);
     // document.body.scrollTop = document.body.scrollHeight;
   };
@@ -37,7 +53,7 @@ const Sequence = ({ children, flattenChildren }) => {
     return React.cloneElement(child, {
       onFinished: () => {
         child.props.onFinished?.();
-        onFinished();
+        onLineFinished();
       },
     });
   });

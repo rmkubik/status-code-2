@@ -7,23 +7,33 @@ import wait from "../utils/wait";
 const BattleIntro = () => {
   const { changeScene, currentLevelKey, levelLoader } = useRootStore();
   const [shouldTypeStart, setShouldTypeStart] = useState(false);
+  const [isSequenceFinished, setIsSequenceFinished] = useState(false);
 
   const intro = levelLoader.getIntro(currentLevelKey);
 
   useEffect(() => {
     const startGame = () => {
+      if (!isSequenceFinished) {
+        return;
+      }
+
       setShouldTypeStart(true);
     };
 
     document.addEventListener("click", startGame);
 
     return () => document.removeEventListener("click", startGame);
-  }, []);
+  }, [isSequenceFinished]);
 
   return (
     <>
       {/* <h1>Start Battle!</h1> */}
-      <Sequence flattenChildren>
+      <Sequence
+        flattenChildren
+        onFinished={() => {
+          setIsSequenceFinished(true);
+        }}
+      >
         <Line>Initiating connection attempt</Line>
         <Line bold inline delay={200}>
           {"Target: "}

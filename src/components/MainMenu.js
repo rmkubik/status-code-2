@@ -10,20 +10,29 @@ import tiles from "../../data/art/tiles.png";
 const MainMenu = () => {
   const { changeScene } = useRootStore();
   const [shouldTypeStart, setShouldTypeStart] = useState(false);
+  const [isSequenceFinished, setIsSequenceFinished] = useState(false);
 
   useEffect(() => {
     const startGame = () => {
+      if (!isSequenceFinished) {
+        return;
+      }
+
       setShouldTypeStart(true);
     };
 
     document.addEventListener("click", startGame);
 
     return () => document.removeEventListener("click", startGame);
-  }, []);
+  }, [isSequenceFinished]);
 
   return (
     <>
-      <Sequence>
+      <Sequence
+        onFinished={() => {
+          setIsSequenceFinished(true);
+        }}
+      >
         <Line asciiArt alt="Status Code">
           {statusCode}
         </Line>
