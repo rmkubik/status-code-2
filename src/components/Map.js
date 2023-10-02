@@ -16,6 +16,8 @@ import styled from "styled-components";
 import isLevelIcon from "../utils/levels/isLevelIcon";
 import getUnlockedLocations from "../utils/levels/getUnlockedLocations";
 import ServerInfo from "./ServerInfo";
+import Chat from "./Chat";
+import Tabs from "./Tabs";
 
 const mapWithDots = map.replaceAll(" ", ".");
 let mapWithSpaces = "";
@@ -105,7 +107,14 @@ const Map = observer(() => {
       </div>
       <RightPanelContainer>
         <ServerInfo selected={selected} tiles={tiles} />
-        <MyPrograms />
+        <Tabs>
+          <Tabs.Tab title="My Programs">
+            <MyPrograms />
+          </Tabs.Tab>
+          <Tabs.Tab title="Chat">
+            <Chat />
+          </Tabs.Tab>
+        </Tabs>
       </RightPanelContainer>
     </MapContainer>
   );

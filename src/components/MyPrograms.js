@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 const List = styled.ul`
   list-style: none;
-  padding: 0;
+  padding: 1rem;
   margin: 0;
 
   canvas {
@@ -36,7 +36,6 @@ const MyPrograms = ({ mode = "view", selectedLocation }) => {
 
   return (
     <>
-      <h2>My Programs</h2>
       <List>
         {inventory.units.map((unitKey, index) => {
           const unit = unitFactory.getUnitData(unitKey);

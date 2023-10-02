@@ -1,19 +1,9 @@
 import React from "react";
 import Line from "./Line";
+import arrayifyChildren from "../utils/react/arrayifyChildren";
 
 function preProcessChildren({ children, flattenChildren }) {
-  let processedChildren;
-
-  /**
-   * Children is not always type array. If it is an
-   * object or string then we surround it in an array.
-   */
-  if (Array.isArray(children)) {
-    // Make a copy of array so we don't modify a prop
-    processedChildren = [...children];
-  } else {
-    processedChildren = [children];
-  }
+  let processedChildren = arrayifyChildren(children);
 
   if (flattenChildren) {
     processedChildren = processedChildren.flat();
