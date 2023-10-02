@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useRootStore } from "../models/Root";
 import map from "bundle-text:../../data/map.txt";
 import Grid from "./Grid";
@@ -6,16 +6,16 @@ import {
   compareLocations,
   constructArray,
   constructMatrixFromTemplate,
-  floodFill,
-  getCrossDirections,
   getLocation,
-  getNeighbors,
 } from "functional-game-utils";
 import Tile from "./Tile";
 import { observer } from "mobx-react-lite";
 import { Tile as TileModel } from "../models/Grid";
 import MyPrograms from "./MyPrograms";
 import styled from "styled-components";
+import isLevelIcon from "../utils/levels/isLevelIcon";
+import getUnlockedLocations from "../utils/levels/getUnlockedLocations";
+import ServerInfo from "./ServerInfo";
 
 const mapWithDots = map.replaceAll(" ", ".");
 let mapWithSpaces = "";
@@ -52,47 +52,10 @@ function padEndRows(matrix, value) {
 
 padEndRows(tiles, { icon: "." });
 
-// https://www.compart.com/en/unicode/block/U+2500
-function isBoxDrawingChar(char) {
-  const charCode = char.charCodeAt(0);
-
-  return charCode >= 0x2500 && charCode <= 0x257f;
-}
-
-function isLevelIcon(icon) {
-  return !isBoxDrawingChar(icon) && icon !== ".";
-}
-
-function getUnlockedLocations({ startLocation, tiles, saveData }) {
-  return floodFill(
-    getNeighbors((tile) => {
-      if (isLevelIcon(tile.icon) && !saveData.isCompleted(tile.icon)) {
-        return [];
-      }
-
-      return getCrossDirections();
-    }),
-    (tile, location) => {
-      if (isLevelIcon(tile.icon)) {
-        return true;
-      }
-
-      if (isBoxDrawingChar(tile.icon)) {
-        return true;
-      }
-
-      return false;
-    },
-    tiles,
-    [startLocation],
-    [],
-    []
-  );
-}
-
 const MapContainer = styled.div`
   display: grid;
   grid-template-columns: max-content max-content;
+  grid-gap: 1rem;
 `;
 
 const RightPanelContainer = styled.div`
@@ -100,22 +63,9 @@ const RightPanelContainer = styled.div`
   flex-direction: column;
 `;
 
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  *:not(:last-child) {
-    margin-right: 1rem;
-  }
-`;
-
 const Map = observer(() => {
   const [selected, setSelected] = useState();
-  const { startBattle, levelLoader, saveData } = useRootStore();
-
-  const selectedTile = selected && getLocation(tiles, selected);
-  let isValidLevelSelected = false;
+  const { saveData } = useRootStore();
 
   const unlockedLocations = useMemo(() => {
     return getUnlockedLocations({
@@ -124,12 +74,6 @@ const Map = observer(() => {
       saveData,
     });
   }, [saveData.levels.size, tiles]);
-
-  if (selectedTile) {
-    if (isLevelIcon(selectedTile.icon) && levelLoader.has(selectedTile.icon)) {
-      isValidLevelSelected = true;
-    }
-  }
 
   return (
     <MapContainer>
@@ -160,41 +104,7 @@ const Map = observer(() => {
         />
       </div>
       <RightPanelContainer>
-        <div>
-          <h2>Server Info</h2>
-          <p style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
-            WHOIS:{" "}
-            {selectedTile &&
-              isLevelIcon(selectedTile.icon) &&
-              levelLoader.getWhois(selectedTile.icon)}
-          </p>
-          <Row style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
-            <div>
-              {selectedTile &&
-              isLevelIcon(selectedTile.icon) &&
-              saveData.isCompleted(selectedTile.icon)
-                ? "200"
-                : selectedTile && !levelLoader.has(selectedTile.icon)
-                ? "404"
-                : "401"}
-            </div>
-            <div>
-              {selectedTile && levelLoader.has(selectedTile.icon)
-                ? levelLoader.getName(selectedTile.icon)
-                : "Not Found"}
-            </div>
-          </Row>
-          <button
-            disabled={!isValidLevelSelected}
-            onClick={() => {
-              if (isLevelIcon(selectedTile.icon)) {
-                startBattle(selectedTile.icon);
-              }
-            }}
-          >
-            Connect
-          </button>
-        </div>
+        <ServerInfo selected={selected} />
         <MyPrograms />
       </RightPanelContainer>
     </MapContainer>

@@ -1,0 +1,19 @@
+name: coffee-dog.com/order
+whois: Coffee Dog, Inc.
+mapIcon: 2,2
+intro:
+  - ASCII:eagle
+  - ""
+  - This system is secured by $[error.bold Royal Eagle AV].
+  - Unauthorized access is forbidden.
+
+tiles: |
+  . . . . . . . 
+  . 0 . . . 0 . 
+  . . . . . . . 
+  . . . . . . . 
+  . * . . . * .
+
+units:
+  - type: shield
+    owner: 1

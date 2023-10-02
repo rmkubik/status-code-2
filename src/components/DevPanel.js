@@ -11,7 +11,7 @@ const DevPanel = () => {
         <ul>
           {Array.from(levelLoader.levelData.entries()).map(
             ([levelKey, levelData]) => (
-              <li>
+              <li key={levelKey}>
                 {levelKey}{" "}
                 <button onClick={() => saveData.markCompleted(levelKey)}>
                   Complete
