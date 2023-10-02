@@ -104,7 +104,7 @@ const Map = observer(() => {
         />
       </div>
       <RightPanelContainer>
-        <ServerInfo selected={selected} />
+        <ServerInfo selected={selected} tiles={tiles} />
         <MyPrograms />
       </RightPanelContainer>
     </MapContainer>

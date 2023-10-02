@@ -2,8 +2,9 @@ import React from "react";
 import isLevelIcon from "../utils/levels/isLevelIcon";
 import { useRootStore } from "../models/Root";
 import Row from "./Row";
+import { getLocation } from "functional-game-utils";
 
-const ServerInfo = ({ selected }) => {
+const ServerInfo = ({ selected, tiles }) => {
   const { startBattle, levelLoader, saveData } = useRootStore();
 
   const selectedTile = selected && getLocation(tiles, selected);
