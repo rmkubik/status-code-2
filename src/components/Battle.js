@@ -21,7 +21,7 @@ const Battle = observer(() => {
 
           const isMoveTarget =
             isUnitSelected &&
-            selectedUnit.isPlayerOwned() &&
+            selectedUnit.isPlayerOwned &&
             selectedUnit.isHeadLocation(selectedLocation) &&
             selectedUnit.canUnitMoveToLocation(grid, location);
 
@@ -83,6 +83,9 @@ const Battle = observer(() => {
         {game.state === "victory" && <p>Victory!</p>}
         {game.state === "defeat" && <p>Defeat!</p>}
         <p style={{ marginRight: "1rem" }}>Turn: {game.currentTurn + 1}</p>
+        <p>
+          Energy: {game.energy.current}/{game.energy.max}
+        </p>
         <button
           style={{ marginRight: "1rem" }}
           disabled={game.state !== "playerActing"}

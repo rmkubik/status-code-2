@@ -42,11 +42,24 @@ const Unit = types
     get head() {
       return self.parts[0];
     },
+    get isPlayerOwned() {
+      const root = getParentOfType(self, RootModel);
+
+      return root.game.isPlayerNumber(self.owner);
+    },
   }))
   .actions((self) => ({
     move(location) {
       if (self.isOutOfMoves) {
         return;
+      }
+
+      if (self.isPlayerOwned) {
+        const { game } = getParentOfType(self, RootModel);
+        if (game.isPlayerOutOfEnergy) {
+          return;
+        }
+        game.spendEnergy();
       }
 
       const grid = getParentOfType(self, Grid);
@@ -152,11 +165,6 @@ const Unit = types
         right: self.isAdjacentPartAtLocation(location, rightLocation),
       };
     },
-    isPlayerOwned() {
-      const root = getParentOfType(self, RootModel);
-
-      return root.game.isPlayerNumber(self.owner);
-    },
     takeDamage: flow(function* takeDamage(damage, location) {
       yield self.animations.start({ key: "flash", part: location });
 
@@ -168,6 +176,14 @@ const Unit = types
     takeAction: flow(function* takeAction(actionIndex, location) {
       if (self.isOutOfActions) {
         return;
+      }
+
+      if (self.isPlayerOwned) {
+        const { game } = getParentOfType(self, RootModel);
+        if (game.isPlayerOutOfEnergy) {
+          return;
+        }
+        game.spendEnergy();
       }
 
       const grid = getParentOfType(self, Grid);

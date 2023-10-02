@@ -50,7 +50,16 @@ const Game = types
       "deployment"
     ),
     actions: types.optional(types.array(PlayerAction), []),
+    energy: types.model({
+      current: types.optional(types.number, 0),
+      max: types.optional(types.number, 4),
+    }),
   })
+  .views((self) => ({
+    get isPlayerOutOfEnergy() {
+      return self.energy.current <= 0;
+    },
+  }))
   .actions((self) => ({
     advanceTurnCount() {
       self.currentTurn += 1;
@@ -61,10 +70,14 @@ const Game = types
     setSelectedActionIndex(newIndex) {
       self.selectedActionIndex = newIndex;
     },
+    resetEnergy() {
+      self.energy.current = self.energy.max;
+    },
     reset() {
       self.currentTurn = 0;
       self.selectedActionIndex = -1;
       self.state = "deployment";
+      self.resetEnergy();
     },
     handleStateAfterEndTurn() {
       // TODO:
@@ -146,9 +159,13 @@ const Game = types
       self.advanceTurnCount();
       self.setSelectedActionIndex(-1);
       grid.resetUnitsForNewTurn();
+      self.resetEnergy();
 
       self.handleStateAfterEndTurn();
     }),
+    spendEnergy() {
+      self.energy.current -= 1;
+    },
   }));
 
 export default Game;

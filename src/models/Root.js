@@ -66,6 +66,7 @@ let initialState = RootModel.create({
   },
   game: {
     playerNumber: 0,
+    energy: {},
   },
   inventory: {
     units: ["hack", "hack"],
@@ -75,8 +76,6 @@ let initialState = RootModel.create({
   asciiArtLoader: {},
   scene: "mainMenu",
   saveData: {},
-  // TODO:
-  // Remove this
   dev: process.env.NODE_ENV === "development",
 });
 

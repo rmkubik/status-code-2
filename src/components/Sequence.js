@@ -28,6 +28,14 @@ const Sequence = ({ children, flattenChildren, onFinished = () => {} }) => {
   }, [currentChild, children.length]);
 
   useEffect(() => {
+    // TODO:
+    // This is buggy!
+    //
+    // It needs to immediately full type every child
+    // and hide every NOT intentionally lingered cursor.
+    //
+    // I'm not 100% how we determine what the "final cursor" is
+    // with the current set up...?
     const skipSequence = () => {
       setCurrentChild(children.length);
     };
