@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import Line from "./Line";
 import arrayifyChildren from "../utils/react/arrayifyChildren";
+import styled from "styled-components";
+import useGlobalClickOnce from "../utils/useGlobalClickOnce";
 
 function preProcessChildren({ children, flattenChildren }) {
   let processedChildren = arrayifyChildren(children);
@@ -18,32 +20,23 @@ function preProcessChildren({ children, flattenChildren }) {
   return processedChildren;
 }
 
-const Sequence = ({ children, flattenChildren, onFinished = () => {} }) => {
+const SequenceContainer = styled.div`
+  display: ${(props) => (props.inline ? "inline-block" : "block")};
+`;
+
+/**
+ * The Sequence MUST have a static length of children
+ * to operate correctly.
+ *
+ * It relies on index order of children which is brittle.
+ */
+const Sequence = ({
+  children,
+  flattenChildren,
+  inline,
+  onFinished = () => {},
+}) => {
   const [currentChild, setCurrentChild] = React.useState(0);
-
-  useEffect(() => {
-    if (currentChild >= children.length - 1) {
-      onFinished();
-    }
-  }, [currentChild, children.length]);
-
-  useEffect(() => {
-    // TODO:
-    // This is buggy!
-    //
-    // It needs to immediately full type every child
-    // and hide every NOT intentionally lingered cursor.
-    //
-    // I'm not 100% how we determine what the "final cursor" is
-    // with the current set up...?
-    const skipSequence = () => {
-      setCurrentChild(children.length);
-    };
-
-    document.addEventListener("click", skipSequence);
-
-    return () => document.removeEventListener("click", skipSequence);
-  }, [children.length]);
 
   const onLineFinished = () => {
     setCurrentChild((prevCurrentChild) => prevCurrentChild + 1);
@@ -55,9 +48,19 @@ const Sequence = ({ children, flattenChildren, onFinished = () => {} }) => {
     flattenChildren,
   });
 
+  useGlobalClickOnce(() => {
+    setCurrentChild(preProcessedChildren.length);
+  });
+
+  useEffect(() => {
+    if (currentChild >= preProcessedChildren.length - 1) {
+      onFinished();
+    }
+  }, [currentChild, preProcessedChildren.length]);
+
   const currentChildren = preProcessedChildren.slice(0, currentChild + 1);
 
-  const boundChildren = currentChildren.map((child) => {
+  const boundChildren = currentChildren.map((child, index) => {
     return React.cloneElement(child, {
       onFinished: () => {
         child.props.onFinished?.();
@@ -66,7 +69,7 @@ const Sequence = ({ children, flattenChildren, onFinished = () => {} }) => {
     });
   });
 
-  return <div>{boundChildren}</div>;
+  return <SequenceContainer inline={inline}>{boundChildren}</SequenceContainer>;
 };
 
 export default Sequence;

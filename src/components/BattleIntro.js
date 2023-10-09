@@ -3,37 +3,17 @@ import { useRootStore } from "../models/Root";
 import Line from "./Line";
 import Sequence from "./Sequence";
 import wait from "../utils/wait";
+import Prompt from "./Prompt";
 
 const BattleIntro = () => {
   const { changeScene, currentLevelKey, levelLoader } = useRootStore();
-  const [shouldTypeStart, setShouldTypeStart] = useState(false);
   const [isSequenceFinished, setIsSequenceFinished] = useState(false);
 
   const intro = levelLoader.getIntro(currentLevelKey);
 
-  useEffect(() => {
-    const startGame = () => {
-      if (!isSequenceFinished) {
-        return;
-      }
-
-      setShouldTypeStart(true);
-    };
-
-    document.addEventListener("click", startGame);
-
-    return () => document.removeEventListener("click", startGame);
-  }, [isSequenceFinished]);
-
   return (
     <>
-      {/* <h1>Start Battle!</h1> */}
-      <Sequence
-        flattenChildren
-        onFinished={() => {
-          setIsSequenceFinished(true);
-        }}
-      >
+      <Sequence onFinished={() => setIsSequenceFinished(true)} flattenChildren>
         <Line>Initiating connection attempt</Line>
         <Line bold inline delay={200}>
           {"Target: "}
@@ -70,25 +50,17 @@ const BattleIntro = () => {
           ^200...
         </Line>
         <Line />
-        <Line bold inline>
-          ${" "}
-        </Line>
-        <Line inline typed clearCursor={shouldTypeStart} />
-        {shouldTypeStart ? (
-          <Line
-            bold
-            inline
-            typed
-            clearCursor={false}
-            onFinished={async () => {
-              await wait(500);
-              changeScene("battle");
-            }}
-          >
-            {"connect $[success server]"}
-          </Line>
-        ) : null}
       </Sequence>
+      {isSequenceFinished ? (
+        <Prompt
+          onFinished={async () => {
+            await wait(500);
+            changeScene("battle");
+          }}
+        >
+          {"connect $[success server]"}
+        </Prompt>
+      ) : null}
     </>
   );
 };
