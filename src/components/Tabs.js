@@ -33,6 +33,7 @@ const Tabs = ({ children }) => {
       <Row>
         {tabChildren.map((tab, index) => (
           <TabTitle
+            key={tab.props.title}
             isSelected={index === selectedIndex}
             onClick={() => setSelectedIndex(index)}
           >

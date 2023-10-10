@@ -58,7 +58,8 @@ const Chat = () => {
           <Messages>
             <ul>
               {messages.map((message) => (
-                <li>{message}</li>
+                // TODO: this key will not work in the long run
+                <li key={message}>{message}</li>
               ))}
             </ul>
           </Messages>

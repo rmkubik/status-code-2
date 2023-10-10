@@ -3,6 +3,7 @@ import Line from "./Line";
 import arrayifyChildren from "../utils/react/arrayifyChildren";
 import styled from "styled-components";
 import useGlobalClickOnce from "../utils/useGlobalClickOnce";
+import { generateUuid } from "functional-game-utils";
 
 function preProcessChildren({ children, flattenChildren }) {
   let processedChildren = arrayifyChildren(children);
@@ -62,6 +63,7 @@ const Sequence = ({
 
   const boundChildren = currentChildren.map((child, index) => {
     return React.cloneElement(child, {
+      key: index,
       onFinished: () => {
         child.props.onFinished?.();
         onLineFinished();
