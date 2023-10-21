@@ -1,0 +1,24 @@
+name: coffee-dog.com/order
+whois: Coffee Dog, Inc.
+mapIcon: 2,2
+intro:
+  - ASCII:dog
+  - ""
+  - Establishing a connection to Coffee Dog, Inc.
+  - is an acceptance of terms and conditions statue
+  - "4.3.b in the United States Corporate penal"
+  - codes for businesses operating in online
+  - capacities.
+  - ""
+  - We hope you have a Dog on Good time!
+
+tiles: |
+  . . . . . . . 
+  . 0 . . . 0 . 
+  . . . . . . . 
+  . . . . . . . 
+  . * . . . * .
+
+units:
+  - type: shield
+    owner: 1

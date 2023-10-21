@@ -154,11 +154,12 @@ const Tile = observer(
     if (isMapTile) {
       if (tileIcon === ".") {
         tileIcon = "";
-      } else if (isLevelIcon(tileIcon)) {
+      } else if (tile.spriteLocation /*isLevelIcon(tileIcon)*/) {
+        console.log(tile.toJSON());
         tileIcon = (
           <Sprite
             src={tiles}
-            location={levelLoader.getMapIcon(tileIcon)}
+            location={tile.spriteLocation}
             color={isCompleted ? "success" : ""}
           />
         );

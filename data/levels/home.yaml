@@ -1,0 +1,32 @@
+name: 127.0.0.1
+whois: You
+mapIcon: 5,14
+intro:
+  - ASCII:home
+  - ""
+  - Home Sweet Home.
+
+tiles: |
+  . . . . . . . . 2 .
+  . . . . . . . . . .
+  . . . . . . . . . .
+  . . 0 . . . . . . .
+  . . . . . . . . . .
+  . . . . . . . . . .
+  . . . . . . . . . .
+  . . . . . 0 . . . .
+  . . 1 . . . . . . .
+  . . . . . . . . . .
+
+units:
+  - type: hack
+    owner: 0
+  - type: shield
+    owner: 1
+    otherParts:
+      - row: 8
+        col: 3
+      - row: 8
+        col: 4
+  - type: shield2
+    owner: 1

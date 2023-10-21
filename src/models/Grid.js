@@ -18,6 +18,8 @@ import Location from "./Location";
 export const Tile = types
   .model("Tile", {
     icon: types.string,
+    levelKey: types.maybe(types.string),
+    spriteLocation: types.maybe(Location),
   })
   .views((self) => ({
     getNeighbors() {

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useRootStore } from "../models/Root";
-import map from "bundle-text:../../data/map.txt";
+import mapTxt from "bundle-text:../../data/map.txt";
 import Grid from "./Grid";
 import {
   compareLocations,
@@ -19,40 +19,51 @@ import ServerInfo from "./ServerInfo";
 import Chat from "./Chat";
 import Tabs from "./Tabs";
 
-const mapWithDots = map.replaceAll(" ", ".");
-let mapWithSpaces = "";
-mapWithDots.split("").forEach((char, index) => {
-  mapWithSpaces += char;
+import map from "../../data/map.json";
+import tileset from "../../data/tiles.json";
+import TiledMap from "../utils/tiled/TiledMap";
 
-  if (char !== "\n" && mapWithDots[index + 1] !== "\n") {
-    mapWithSpaces += " ";
-  }
-});
+console.log({ map, tileset });
 
-const tiles = constructMatrixFromTemplate(
-  (icon) => TileModel.create({ icon }),
-  mapWithSpaces
-);
+const tiledMap = TiledMap.create({ map, tileset });
+const tiles = tiledMap.createGameTiles();
 
-function getLongestRowLength(matrix) {
-  return Math.max(...matrix.map((row) => row.length));
-}
+console.log({ tiles });
 
-function padEndRows(matrix, value) {
-  const width = getLongestRowLength(matrix);
+// const mapWithDots = mapTxt.replaceAll(" ", ".");
+// let mapWithSpaces = "";
+// mapWithDots.split("").forEach((char, index) => {
+//   mapWithSpaces += char;
 
-  for (let row of matrix) {
-    const paddingLength = width - row.length;
+//   if (char !== "\n" && mapWithDots[index + 1] !== "\n") {
+//     mapWithSpaces += " ";
+//   }
+// });
 
-    if (paddingLength > 0) {
-      const padding = constructArray(() => value, paddingLength);
+// const tiles = constructMatrixFromTemplate(
+//   (icon) => TileModel.create({ icon }),
+//   mapWithSpaces
+// );
 
-      row.push(...padding);
-    }
-  }
-}
+// function getLongestRowLength(matrix) {
+//   return Math.max(...matrix.map((row) => row.length));
+// }
 
-padEndRows(tiles, { icon: "." });
+// function padEndRows(matrix, value) {
+//   const width = getLongestRowLength(matrix);
+
+//   for (let row of matrix) {
+//     const paddingLength = width - row.length;
+
+//     if (paddingLength > 0) {
+//       const padding = constructArray(() => value, paddingLength);
+
+//       row.push(...padding);
+//     }
+//   }
+// }
+
+// padEndRows(tiles, { icon: "." });
 
 const MapContainer = styled.div`
   display: grid;
@@ -92,11 +103,12 @@ const Map = observer(() => {
                 isLevelIcon(tile.icon) && saveData.isCompleted(tile.icon)
               }
               tile={
-                unlockedLocations.some((unlockedLocation) =>
-                  compareLocations(unlockedLocation, location)
-                )
-                  ? tile
-                  : { icon: "" }
+                // unlockedLocations.some((unlockedLocation) =>
+                //   compareLocations(unlockedLocation, location)
+                // )
+                //   ? tile
+                //   : { icon: "" }
+                tile
               }
               onClick={() => {
                 setSelected(location);
