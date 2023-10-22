@@ -20,8 +20,28 @@ export const Tile = types
     icon: types.string,
     levelKey: types.maybe(types.string),
     spriteLocation: types.maybe(Location),
+    connections: types.maybe(
+      types.model({
+        up: types.boolean,
+        down: types.boolean,
+        left: types.boolean,
+        right: types.boolean,
+      })
+    ),
   })
   .views((self) => ({
+    get hasAnyConnection() {
+      if (!self.connections) {
+        return false;
+      }
+
+      return (
+        self.connections.up ||
+        self.connections.down ||
+        self.connections.left ||
+        self.connections.right
+      );
+    },
     getNeighbors() {
       /**
        * TODO:

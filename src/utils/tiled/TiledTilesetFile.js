@@ -1,4 +1,10 @@
 import { types } from "mobx-state-tree";
+import { TiledCustomProperty } from "./TiledObject";
+
+const TilesetTileObject = types.model({
+  id: types.number,
+  properties: types.array(TiledCustomProperty),
+});
 
 const TiledTilesetFile = types
   .model({
@@ -10,6 +16,7 @@ const TiledTilesetFile = types
     tilewidth: types.number,
     // height of a tile in pixels
     tileheight: types.number,
+    tiles: types.array(TilesetTileObject),
   })
   .views((self) => ({
     getLocationFromTileId(tileId) {
@@ -21,7 +28,7 @@ const TiledTilesetFile = types
       return { row, col };
     },
     getPropertiesForTileId(tileId) {
-      const tile = this.tileset.tiles.find((tile) => tile.id === tileId);
+      const tile = self.tiles.find((tile) => tile.id === tileId);
 
       if (!tile.properties) {
         return {};

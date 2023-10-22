@@ -11,7 +11,7 @@ const ServerInfo = ({ selected, tiles }) => {
   let isValidLevelSelected = false;
 
   if (selectedTile) {
-    if (isLevelIcon(selectedTile.icon) && levelLoader.has(selectedTile.icon)) {
+    if (selectedTile.levelKey && levelLoader.has(selectedTile.levelKey)) {
       isValidLevelSelected = true;
     }
   }
@@ -22,32 +22,32 @@ const ServerInfo = ({ selected, tiles }) => {
       <p style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
         WHOIS:{" "}
         {selectedTile &&
-        isLevelIcon(selectedTile.icon) &&
-        levelLoader.getWhois(selectedTile.icon)
-          ? levelLoader.getWhois(selectedTile.icon)
+        selectedTile.levelKey &&
+        levelLoader.getWhois(selectedTile.levelKey)
+          ? levelLoader.getWhois(selectedTile.levelKey)
           : "???"}
       </p>
       <Row style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
         <div>
           {selectedTile &&
-          isLevelIcon(selectedTile.icon) &&
-          saveData.isCompleted(selectedTile.icon)
+          selectedTile.levelKey &&
+          saveData.isCompleted(selectedTile.levelKey)
             ? "200"
-            : selectedTile && !levelLoader.has(selectedTile.icon)
+            : selectedTile && !levelLoader.has(selectedTile.levelKey)
             ? "404"
             : "401"}
         </div>
         <div>
-          {selectedTile && levelLoader.has(selectedTile.icon)
-            ? levelLoader.getName(selectedTile.icon)
+          {selectedTile && levelLoader.has(selectedTile.levelKey)
+            ? levelLoader.getName(selectedTile.levelKey)
             : "Not Found"}
         </div>
       </Row>
       <button
         disabled={!isValidLevelSelected}
         onClick={() => {
-          if (isLevelIcon(selectedTile.icon)) {
-            startBattle(selectedTile.icon);
+          if (selectedTile.levelKey) {
+            startBattle(selectedTile.levelKey);
           }
         }}
       >

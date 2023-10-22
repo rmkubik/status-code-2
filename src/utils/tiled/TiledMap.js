@@ -38,9 +38,18 @@ const TiledMap = types
 
       const tileId = self.map.getTileIdFromGid(connection);
 
+      const properties = self.tileset.getPropertiesForTileId(tileId);
+      const connections = {
+        up: properties["connect-up"] ?? false,
+        down: properties["connect-down"] ?? false,
+        left: properties["connect-left"] ?? false,
+        right: properties["connect-right"] ?? false,
+      };
+
       return {
         location,
         spriteLocation: self.tileset.getSpriteLocationFromTileId(tileId),
+        connections,
       };
     },
     createGameTiles() {
@@ -57,7 +66,6 @@ const TiledMap = types
           return TileModel.create({
             icon: "2",
             ...connection,
-            // spriteLocation: { row: 1, col: 0 },
           });
         }
 

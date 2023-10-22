@@ -82,7 +82,7 @@ const Map = observer(() => {
 
   const unlockedLocations = useMemo(() => {
     return getUnlockedLocations({
-      startLocation: { row: 2, col: 0 },
+      startLocation: tiledMap.map.startLocation,
       tiles,
       saveData,
     });
@@ -99,16 +99,14 @@ const Map = observer(() => {
               key={`${location.row}.${location.col}`}
               isMapTile
               isSelected={selected && compareLocations(location, selected)}
-              isCompleted={
-                isLevelIcon(tile.icon) && saveData.isCompleted(tile.icon)
-              }
+              isCompleted={tile.levelKey && saveData.isCompleted(tile.levelKey)}
               tile={
-                // unlockedLocations.some((unlockedLocation) =>
-                //   compareLocations(unlockedLocation, location)
-                // )
-                //   ? tile
-                //   : { icon: "" }
-                tile
+                unlockedLocations.some((unlockedLocation) =>
+                  compareLocations(unlockedLocation, location)
+                )
+                  ? tile
+                  : { icon: "" }
+                // tile
               }
               onClick={() => {
                 setSelected(location);

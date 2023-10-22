@@ -9,18 +9,18 @@ import isBoxDrawingChar from "./isBoxDrawingChar";
 function getUnlockedLocations({ startLocation, tiles, saveData }) {
   return floodFill(
     getNeighbors((tile) => {
-      if (isLevelIcon(tile.icon) && !saveData.isCompleted(tile.icon)) {
+      if (tile.levelKey && !saveData.isCompleted(tile.levelKey)) {
         return [];
       }
 
       return getCrossDirections();
     }),
     (tile, location) => {
-      if (isLevelIcon(tile.icon)) {
+      if (tile.levelKey) {
         return true;
       }
 
-      if (isBoxDrawingChar(tile.icon)) {
+      if (tile.hasAnyConnection) {
         return true;
       }
 

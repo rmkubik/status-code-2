@@ -12,9 +12,16 @@ const TiledCustomIntProperty = types.model({
   value: types.number,
 });
 
-const TiledCustomProperty = types.union(
+const TiledCustomBoolProperty = types.model({
+  name: types.string,
+  type: types.literal("bool"),
+  value: types.boolean,
+});
+
+export const TiledCustomProperty = types.union(
   TiledCustomStringProperty,
-  TiledCustomIntProperty
+  TiledCustomIntProperty,
+  TiledCustomBoolProperty
 );
 
 const TiledObject = types
@@ -35,6 +42,14 @@ const TiledObject = types
         x: self.x,
         y: self.y,
       };
+    },
+    get propertiesObj() {
+      return self.properties.reduce((propertiesObj, currentProperty) => {
+        return {
+          ...propertiesObj,
+          [currentProperty.name]: currentProperty.value,
+        };
+      }, {});
     },
   }));
 

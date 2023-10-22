@@ -20,17 +20,8 @@ const TiledMapFileObjectLayer = types
 
       return self.objects.find((object) => {
         const objectLocation = tiledMapFile.getLocationFromPoint(object.point);
-        // The origin of object tiles is in the lower left corner
-        // This means an object in the upper left corner of the Tiled
-        // map will have an x,y position of 0,16 and a converted
-        // location of 1,0.
-        // We need to offset this adjustment here.
-        const adjustedObjectLocation = addLocations(objectLocation, {
-          row: -1,
-          col: 0,
-        });
 
-        return compareLocations(location, adjustedObjectLocation);
+        return compareLocations(location, objectLocation);
       });
     },
   }));
@@ -80,7 +71,16 @@ const TiledMapFile = types
       return gid - firstgid;
     },
     getLocationFromPoint({ x, y }) {
-      const row = Math.floor(y / self.tileheight);
+      // The origin of object tiles is in the lower left corner.
+      //
+      // This means an object in the upper left corner of the Tiled
+      // map will have an x,y position of 0,16 and a converted
+      // location of 1,0.
+      //
+      // We need to offset this adjustment here by subtracting the
+      // the tileheight from the y position.
+
+      const row = Math.floor((y - self.tileheight) / self.tileheight);
       const col = Math.floor(x / self.tilewidth);
 
       return { row, col };
@@ -102,6 +102,30 @@ const TiledMapFile = types
     },
     get connectionsLayer() {
       return self.layers.find((layer) => layer.name === "connections");
+    },
+    get startLocation() {
+      const startServer = self.serversLayer.objects.find((object) => {
+        if (!object.properties) {
+          return false;
+        }
+
+        const isStartProperty = object.properties.find(
+          (property) => property.name === "isStart"
+        );
+
+        if (!isStartProperty) {
+          return false;
+        }
+
+        return isStartProperty.value;
+      });
+
+      if (!startServer) {
+        console.warn("No starting location found in map.");
+        return { row: 0, col: 0 };
+      }
+
+      return self.getLocationFromPoint(startServer.point);
     },
   }));
 
