@@ -6,7 +6,6 @@ import Location from "./Location";
 
 const UnitData = types
   .model("UnitData", {
-    headIcon: types.string,
     headSprite: Location,
     maxLength: types.number,
     name: types.string,

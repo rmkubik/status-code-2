@@ -123,12 +123,6 @@ const Tile = observer(
 
       if (isHead) {
         tileIcon = <Sprite src={tiles} location={unitOnTile.headSprite} />;
-        // tileIcon =
-        //   unitOnTile.headIcon === "@" ? (
-        //     <img src={woodAxe} />
-        //   ) : (
-        //     <img src={checkedShield} />
-        //   );
       } else {
         tileIcon = "";
       }

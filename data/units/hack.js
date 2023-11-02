@@ -1,5 +1,4 @@
 export default {
-  headIcon: "@",
   headSprite: {
     row: 0,
     col: 0,
